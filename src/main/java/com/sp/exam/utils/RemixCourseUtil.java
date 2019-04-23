@@ -22,6 +22,11 @@ public class RemixCourseUtil {
         remixCourseUtil.limitDao = this.limitDao;
     }
 
+    /**
+         * @Description:如果返回为真说明这两个课程可以组合
+         * @author: SSp1ash
+         * @Date:   2019/4/23
+         */
     public static boolean contrast(Course a, Course b) {
 
 

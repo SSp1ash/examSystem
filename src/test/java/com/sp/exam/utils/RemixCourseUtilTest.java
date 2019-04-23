@@ -24,7 +24,7 @@ public class RemixCourseUtilTest {
     @Test
     public void contrast() {
         RemixCourseUtil remixCourseUtil=new RemixCourseUtil();
-        boolean contrast = remixCourseUtil.contrast(courseDao.findById("1A00042").get(), courseDao.findById("1A00021").get());
+        boolean contrast = remixCourseUtil.contrast(courseDao.findById("1A00042").get(), courseDao.findById("1A00011").get());
         System.out.println(contrast);
     }
 }
