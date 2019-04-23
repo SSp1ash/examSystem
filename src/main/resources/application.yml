@@ -1,0 +1,12 @@
+server:
+  port: 80
+  servlet:
+    context-path: /exam
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/db_exam?useSSL=false&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  jpa:
+    show-sql: true
