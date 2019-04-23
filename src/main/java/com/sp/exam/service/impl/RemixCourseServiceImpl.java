@@ -37,28 +37,31 @@ public class RemixCourseServiceImpl implements RemixCourseService {
         List<CourseExam> courseExam = courseExamDao.findAll();
         //使用迭代器
         Iterator<CourseExam> it =courseExam.iterator();
-        for(int i=0;i<courseExam.size();i++){
+        while(it.hasNext()){
             //如果是公共课，直接加入remix,然后把它从list里面删除
-            if(courseDao.findById(courseExam.get(i).getCourseNo()).get().getLimit()==0){
+
+            //取出迭代器所指向的值
+            CourseExam thisCourseExam = it.next();
+            //判断是否为公共课，公共课直接加入然后从List里面删掉
+            if(courseDao.findById(thisCourseExam.getCourseNo()).get().getLimit()==0){
                 CourseRemix courseRemix=new CourseRemix();
                 courseRemix.setRemixId(KeyUtil.genUniqueKey());
-                courseRemix.setTime(courseExam.get(i).getTime());
+                courseRemix.setTime(thisCourseExam.getTime());
                 courseRemix.setBeArranged(String.valueOf(CommonEnum.NOT_BE_ARRANGED.getCode()));
-                courseRemix.setWeight(courseExam.get(i).getWeight());
+                courseRemix.setWeight(thisCourseExam.getWeight());
                 courseRemixDao.save(courseRemix);
                 CourseRemixRecord courseRemixRecord=new CourseRemixRecord();
                 courseRemixRecord.setRemixId(courseRemix.getRemixId());
-                courseRemixRecord.setCourseId(courseExam.get(i).getCourseNo());
-                courseRemixRecord.setTime(courseExam.get(i).getTime());
+                courseRemixRecord.setCourseId(thisCourseExam.getCourseNo());
+                courseRemixRecord.setTime(thisCourseExam.getTime());
                 courseRemixRecord.setBeArranged(String.valueOf(CommonEnum.NOT_BE_ARRANGED.getCode()));
                 courseRemixRecordDao.save(courseRemixRecord);
 
                 //此时删除该list
-                courseExam.remove(i);
-
+                it.remove();
             }
-
         }
+        System.out.println(courseExam.size());
 
     }
 }

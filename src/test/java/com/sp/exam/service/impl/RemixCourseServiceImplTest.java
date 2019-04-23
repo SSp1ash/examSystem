@@ -29,16 +29,16 @@ public class RemixCourseServiceImplTest {
     }
 
     @Test
-    public void listTest(){
+    public void listTest() {
 
-        String[] arr={"a","b","a"};
-        List<String> list=new ArrayList<>(Arrays.asList(arr));
-        Iterator<String> it=list.iterator();
-        while (it.hasNext()){
-            if(it.next().equals("a")){
-                it.remove();
-            }
-            System.out.println(list);
+        String[] arr = {"a", "b", "a"};
+        List<String> list = new ArrayList<>(Arrays.asList(arr));
+        Iterator<String> it = list.iterator();
+        while (it.hasNext()) {
+            System.out.println(it.next());
         }
+
     }
+
+
 }
