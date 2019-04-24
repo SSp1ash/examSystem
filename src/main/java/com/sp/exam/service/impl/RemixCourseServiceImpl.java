@@ -67,52 +67,55 @@ public class RemixCourseServiceImpl implements RemixCourseService {
 
         //2.开始把剩下的可以组合的课进行组合
         if(courseExam.size()>0){
-            for(int i=1;i<courseExam.size();i++){
+            for(int i=1;i<courseExam.size();i++) {
                 boolean contrast = RemixCourseUtil.contrast(courseDao.findById(courseExam.get(0).getCourseNo()).get()
                         , courseDao.findById(courseExam.get(i).getCourseNo()).get());
                 //如果可以组合就把这两个从list里面删除掉然后写入remix表
-                if(contrast){
-                    CourseRemix courseRemix=new CourseRemix();
+                if (contrast) {
+                    CourseRemix courseRemix = new CourseRemix();
                     courseRemix.setRemixId(KeyUtil.genUniqueKey());
-                    courseRemix.setWeight(courseExam.get(0).getWeight()+courseExam.get(i).getWeight());
+                    courseRemix.setWeight(courseExam.get(0).getWeight() + courseExam.get(i).getWeight());
                     courseRemix.setBeArranged("0");
                     courseRemix.setTime(courseExam.get(0).getTime());
 
                     courseRemixDao.save(courseRemix);
 
-                    CourseRemixRecord courseRemixRecord=new CourseRemixRecord();
+                    CourseRemixRecord courseRemixRecord = new CourseRemixRecord();
                     courseRemixRecord.setRemixId(courseRemix.getRemixId());
                     courseRemixRecord.setCourseId(courseExam.get(0).getCourseNo());
                     courseRemixRecord.setBeArranged("0");
                     courseRemixRecord.setTime(courseExam.get(0).getTime());
-                    CourseRemixRecord courseRemixRecord1=new CourseRemixRecord();
+                    CourseRemixRecord courseRemixRecord1 = new CourseRemixRecord();
                     //两者就一个课程号不一样，所以用拷贝
-                    BeanUtils.copyProperties(courseRemixRecord,courseRemixRecord1);
+                    BeanUtils.copyProperties(courseRemixRecord, courseRemixRecord1);
                     courseRemixRecord1.setCourseId(courseExam.get(i).getCourseNo());
                     //然后写入数据库
                     courseRemixRecordDao.save(courseRemixRecord);
                     courseRemixRecordDao.save(courseRemixRecord1);
                     //然后把这两个从list里面删除了
                     courseExam.remove(0);
-                    courseExam.remove(i-1);
+                    courseExam.remove(i - 1);
                     continue;
                 }
                 //如果没找到匹配的就直接把他像公共课一样处理
-                CourseRemix courseRemix=new CourseRemix();
-                courseRemix.setRemixId(KeyUtil.genUniqueKey());
-                courseRemix.setTime(courseExam.get(0).getTime());
-                courseRemix.setBeArranged(String.valueOf(CommonEnum.NOT_BE_ARRANGED.getCode()));
-                courseRemix.setWeight(courseExam.get(0).getWeight());
-                courseRemixDao.save(courseRemix);
-                CourseRemixRecord courseRemixRecord=new CourseRemixRecord();
-                courseRemixRecord.setRemixId(courseRemix.getRemixId());
-                courseRemixRecord.setCourseId(courseExam.get(0).getCourseNo());
-                courseRemixRecord.setTime(courseExam.get(0).getTime());
-                courseRemixRecord.setBeArranged(String.valueOf(CommonEnum.NOT_BE_ARRANGED.getCode()));
-                courseRemixRecordDao.save(courseRemixRecord);
-                courseExam.remove(0);
-                //把i复位
-                i=1;
+                if (i == courseExam.size() - 1) {
+                    CourseRemix courseRemix = new CourseRemix();
+                    courseRemix.setRemixId(KeyUtil.genUniqueKey());
+                    courseRemix.setTime(courseExam.get(0).getTime());
+                    courseRemix.setBeArranged(String.valueOf(CommonEnum.NOT_BE_ARRANGED.getCode()));
+                    courseRemix.setWeight(courseExam.get(0).getWeight());
+                    courseRemixDao.save(courseRemix);
+                    CourseRemixRecord courseRemixRecord = new CourseRemixRecord();
+                    courseRemixRecord.setRemixId(courseRemix.getRemixId());
+                    courseRemixRecord.setCourseId(courseExam.get(0).getCourseNo());
+                    courseRemixRecord.setTime(courseExam.get(0).getTime());
+                    courseRemixRecord.setBeArranged(String.valueOf(CommonEnum.NOT_BE_ARRANGED.getCode()));
+                    courseRemixRecordDao.save(courseRemixRecord);
+                    courseExam.remove(0);
+                    //把i复位
+                    i = 1;
+                    continue;
+                }
             }
         }
         if(courseExam.size()==1){
