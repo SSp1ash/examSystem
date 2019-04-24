@@ -27,4 +27,12 @@ public class RemixCourseUtilTest {
         boolean contrast = remixCourseUtil.contrast(courseDao.findById("1A00042").get(), courseDao.findById("1A00011").get());
         System.out.println(contrast);
     }
+
+    @Test
+    public void contrastLimit(){
+        boolean b = RemixCourseUtil.contrastLimit("5", "8");
+        System.out.println(b);
+    }
+
+
 }

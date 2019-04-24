@@ -29,7 +29,6 @@ public class RemixCourseUtil {
          */
     public static boolean contrast(Course a, Course b) {
 
-
         //拿到两个课程的限制代号
         if (!(a.getLimit() == b.getLimit())) {
             List<Limit> byLimitId = remixCourseUtil.limitDao.findByLimitId(0);
@@ -48,7 +47,24 @@ public class RemixCourseUtil {
         }
         return false;
 
+    }
 
-
+    //用于后面直接比较两个limit代号
+    public static boolean contrastLimit(String a,String b){
+        if(!a.equals(b)) {
+            List<Limit> listA = remixCourseUtil.limitDao.findByLimitId(Integer.valueOf(a));
+            List<Limit> listB = remixCourseUtil.limitDao.findByLimitId(Integer.valueOf(b));
+            List<String> majorA = listA.stream().map(e -> e.getMajorNo()).collect(Collectors.toList());
+            List<String> majorB = listB.stream().map(e -> e.getMajorNo()).collect(Collectors.toList());
+            for (String m1 : majorA) {
+                for (String m2 : majorB) {
+                    if (m1.equals(m2)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }

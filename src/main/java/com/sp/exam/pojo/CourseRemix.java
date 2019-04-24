@@ -15,6 +15,9 @@ public class CourseRemix {
 
     private String beArranged;
 
+    //此处limit格式为组合之前的limit"+"+limit
+    private String remixLimit;
+
     private String time;
 
 }

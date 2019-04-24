@@ -53,6 +53,7 @@ public class RemixCourseServiceImpl implements RemixCourseService {
                 courseRemix.setTime(thisCourseExam.getTime());
                 courseRemix.setBeArranged(String.valueOf(CommonEnum.NOT_BE_ARRANGED.getCode()));
                 courseRemix.setWeight(thisCourseExam.getWeight());
+                courseRemix.setRemixLimit("0");
                 courseRemixDao.save(courseRemix);
                 CourseRemixRecord courseRemixRecord=new CourseRemixRecord();
                 courseRemixRecord.setRemixId(courseRemix.getRemixId());
@@ -77,6 +78,8 @@ public class RemixCourseServiceImpl implements RemixCourseService {
                     courseRemix.setWeight(courseExam.get(0).getWeight() + courseExam.get(i).getWeight());
                     courseRemix.setBeArranged("0");
                     courseRemix.setTime(courseExam.get(0).getTime());
+                    courseRemix.setRemixLimit(String.valueOf(courseDao.findById(courseExam.get(0).getCourseNo()).get().getLimit())+"+"
+                            +String.valueOf(courseDao.findById(courseExam.get(i).getCourseNo()).get().getLimit()));
 
                     courseRemixDao.save(courseRemix);
 
@@ -104,6 +107,7 @@ public class RemixCourseServiceImpl implements RemixCourseService {
                     courseRemix.setTime(courseExam.get(0).getTime());
                     courseRemix.setBeArranged(String.valueOf(CommonEnum.NOT_BE_ARRANGED.getCode()));
                     courseRemix.setWeight(courseExam.get(0).getWeight());
+                    courseRemix.setRemixLimit(String.valueOf(courseDao.findById(courseExam.get(0).getCourseNo()).get().getLimit()));
                     courseRemixDao.save(courseRemix);
                     CourseRemixRecord courseRemixRecord = new CourseRemixRecord();
                     courseRemixRecord.setRemixId(courseRemix.getRemixId());
@@ -124,6 +128,7 @@ public class RemixCourseServiceImpl implements RemixCourseService {
             courseRemix.setTime(courseExam.get(0).getTime());
             courseRemix.setBeArranged(String.valueOf(CommonEnum.NOT_BE_ARRANGED.getCode()));
             courseRemix.setWeight(courseExam.get(0).getWeight());
+            courseRemix.setRemixLimit(String.valueOf(courseDao.findById(courseExam.get(0).getCourseNo()).get().getLimit()));
             courseRemixDao.save(courseRemix);
             CourseRemixRecord courseRemixRecord=new CourseRemixRecord();
             courseRemixRecord.setRemixId(courseRemix.getRemixId());
