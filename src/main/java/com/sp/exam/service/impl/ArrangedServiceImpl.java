@@ -152,7 +152,7 @@ public class ArrangedServiceImpl implements ArrangedService {
                 if(theNearTime.getBeArranged().equals("0")){
 
                 }else{
-                    //TODO  当附近的课程不为空的一系列判断
+
                     String remixLimit = courseRemixDao.findById(theNearTime.getRemixId()).get().getRemixLimit();
                     //把remixLimit字符串分割开形成了String数组
                     String[] near=remixLimit.split("\\+");

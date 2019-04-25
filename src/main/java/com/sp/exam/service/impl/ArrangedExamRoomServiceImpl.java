@@ -50,8 +50,9 @@ public class ArrangedExamRoomServiceImpl implements ArrangedExamRoomService {
                 courseSelectResultList.addAll(courseSelectResultDao.findByCourseNo(courseNo));
             }
             List<ExamRoom> examRoomList = examRoomDao.findByAvailable(1);
+            int i=0;
             for(CourseSelectResult courseSelectResult:courseSelectResultList){
-                int i=0;
+
                 if(examRoomList.get(i)==null){
                     throw new ArrangedException(ArrangedEnum.LACK_OF_ROOM);
                 }
