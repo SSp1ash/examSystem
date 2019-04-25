@@ -35,4 +35,9 @@ public class ArrangedServiceImplTest {
     public void arrangedTimeTableByTimeSlot(){
         arrangedService.arrangedTimeTableByTimeSlot();
     }
+
+
+
+    @Test
+    public void arrangedTimeTableByNoting(){arrangedService.arrangedTimeTableByNoting();}
 }

@@ -197,9 +197,50 @@ public class ArrangedServiceImpl implements ArrangedService {
                     break;
                 }
 
+            }
+        }
+    }
 
+
+    /**
+         * @Description:此方法是无视任何规则，只要有可以插入的时间就插入
+         * @author: SSp1ash
+         * @Date:   2019/4/25
+         */
+    @Override
+    public void arrangedTimeTableByNoting() {
+        //1.取出需要拍的课程还有可用的时间
+        List<CourseRemix> courseRemixes = courseRemixDao.findByTimeAndBeArrangedOrderByWeightDesc(GetSemester.get(), "0");
+        List<TimeTable> timeTables = timeTableDao.findByBeArrangedAndTimeSemester("0",GetSemester.get());
+        for(int i=0;i<courseRemixes.size();i++){
+            for(int j=0;j<timeTables.size();j++) {
+                CourseRemix courseRemix = courseRemixes.get(i);
+                TimeTable timeTable = timeTables.get(j);
+                if(timeTable.getBeArranged().equals("1")){continue;}
+                timeTable.setRemixId(courseRemix.getRemixId());
+                timeTable.setBeArranged("1");
+                timeTableDao.save(timeTable);
+                courseRemix.setBeArranged("1");
+                courseRemixDao.save(courseRemix);
+
+                List<CourseRemixRecord> byRemixId = courseRemixRecordDao.findByRemixId(courseRemix.getRemixId());
+                for(CourseRemixRecord courseRemixRecord:byRemixId){
+                    courseRemixRecord.setBeArranged("1");
+                    courseRemixRecordDao.save(courseRemixRecord);
+                }
+
+                List<String> courseList = byRemixId.stream().map(e -> e.getCourseId()).collect(Collectors.toList());
+
+                for(String courseNo:courseList){
+                    CourseExam courseExam = courseExamDao.findById(courseNo).get();
+                    courseExam.setBeArranged("1");
+                    courseExamDao.save(courseExam);
+                }
+                //保存执行完毕
+                break;
             }
         }
 
     }
 }
+

@@ -4,4 +4,6 @@ public interface ArrangedService {
     void arrangedTimeTableByDay();
 
     void arrangedTimeTableByTimeSlot();
+
+    void arrangedTimeTableByNoting();
 }
