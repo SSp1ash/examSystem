@@ -20,7 +20,7 @@ public class ArrangedServiceImplTest {
 
     @Test
     public void arrangedTimeTable() {
-        arrangedService.arrangedTimeTable();
+        arrangedService.arrangedTimeTableByDay();
     }
 
     @Test
@@ -29,5 +29,10 @@ public class ArrangedServiceImplTest {
         String substring = a.substring(1, 2);
         System.out.println(substring);
 
+    }
+
+    @Test
+    public void arrangedTimeTableByTimeSlot(){
+        arrangedService.arrangedTimeTableByTimeSlot();
     }
 }

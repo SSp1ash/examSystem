@@ -1,5 +1,7 @@
 package com.sp.exam.service;
 
 public interface ArrangedService {
-    void arrangedTimeTable();
+    void arrangedTimeTableByDay();
+
+    void arrangedTimeTableByTimeSlot();
 }

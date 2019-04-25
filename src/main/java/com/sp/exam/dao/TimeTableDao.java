@@ -9,4 +9,6 @@ public interface TimeTableDao extends JpaRepository<TimeTable,String> {
     List<TimeTable> findByBeArrangedAndTimeSemester(String beArranged,String timeSemester);
 
     List<TimeTable> findByTimeDetailLike(String timeDetail);
+
+    List<TimeTable> findByTimeDetailLikeAndTimeSlot(String timeDetail,String timeSlot);
 }

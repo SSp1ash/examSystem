@@ -37,8 +37,6 @@ public class ArrangedServiceImpl implements ArrangedService {
     @Autowired
     private CourseRemixRecordDao courseRemixRecordDao;
 
-
-
     /**
          * @Description:这个函数目前是排出学生一天最多考一堂课的函数，
          * 还有一些没有排到时间表上的课程，在自动排课课程中，接下来会进行尽量不在一个上午或者一个下午考试的安排方法，
@@ -47,7 +45,7 @@ public class ArrangedServiceImpl implements ArrangedService {
          * @Date:   2019/4/24
          */
     @Override
-    public void arrangedTimeTable() {
+    public void arrangedTimeTableByDay() {
         //1.取出需要拍的课程还有可用的时间
         List<CourseRemix> courseRemixes = courseRemixDao.findByTimeAndBeArrangedOrderByWeightDesc(GetSemester.get(), "0");
         List<TimeTable> timeTables = timeTableDao.findByBeArrangedAndTimeSemester("0",GetSemester.get());
@@ -84,8 +82,6 @@ public class ArrangedServiceImpl implements ArrangedService {
                         if(flag==1){break;}
                     }
 
-
-
                     }
                     //这时候说明这天学生只会考一堂考试，可以直接把当前课程插入当前时间
                     if(flag==0&&x==nearbyTime.size()-1){
@@ -102,7 +98,6 @@ public class ArrangedServiceImpl implements ArrangedService {
                         }
 
                         List<String> courseList = byRemixId.stream().map(e -> e.getCourseId()).collect(Collectors.toList());
-
 
                         for(String courseNo:courseList){
                             CourseExam courseExam = courseExamDao.findById(courseNo).get();
@@ -122,10 +117,88 @@ public class ArrangedServiceImpl implements ArrangedService {
                     timeTables.remove(j);
                     break;
                 }
+            }
+        }
+    }
+
+    /**
+         * @Description:排考时考虑为学生将不会在一个上午或者下午考多堂考试，这个方法最好是在ByDay执行完后再次执行此方法
+         * @author: SSp1ash
+         * @Date:   2019/4/24
+         */
+    @Override
+    public void arrangedTimeTableByTimeSlot() {
+        //1.取出需要拍的课程还有可用的时间
+        List<CourseRemix> courseRemixes = courseRemixDao.findByTimeAndBeArrangedOrderByWeightDesc(GetSemester.get(), "0");
+        List<TimeTable> timeTables = timeTableDao.findByBeArrangedAndTimeSemester("0",GetSemester.get());
+
+        //2.给课程排考，此时考虑的是不在同一个上午或者下午
+        int flag=0;
+        for(int i=0;i<courseRemixes.size();i++){
+            for(int j=0;j<timeTables.size();j++){
+                flag=0;
+                CourseRemix courseRemix = courseRemixes.get(i);
+                TimeTable timeTable = timeTables.get(j);
+                if(timeTable.getBeArranged().equals("1")){continue;}
+                //开始进行判断
+                String dayTime = timeTable.getTimeDetail().substring(0, 2);
+                List<TimeTable> nearbyTime = timeTableDao.findByTimeDetailLikeAndTimeSlot(dayTime + "%",timeTable.getTimeSlot());
+                TimeTable theNearTime=new TimeTable();
+                for(TimeTable nearTime:nearbyTime){
+                    if(!nearTime.getTimeDetail().equals(timeTable.getTimeDetail())){
+                        theNearTime=nearTime;
+                    }
+                }
+                //theNearTime就是同是上午或者下午的他的相邻的那堂考试
+                //如果theNearTime没有被安排自然就可以吧当前考试插入当前时间
+                if(theNearTime.getBeArranged().equals("0")){
+
+                }else{
+                    //TODO  当附近的课程不为空的一系列判断
+                    String remixLimit = courseRemixDao.findById(theNearTime.getRemixId()).get().getRemixLimit();
+                    //把remixLimit字符串分割开形成了String数组
+                    String[] near=remixLimit.split("\\+");
+                    String[] thisRemix=courseRemix.getRemixLimit().split("\\+");
+
+                    for(int q=0;q<near.length;q++){
+                        for(int w=0;w<thisRemix.length;w++) {
+                            if(RemixCourseUtil.contrastLimit(near[q],thisRemix[w])){
+                                continue;
+                            }else {
+                                flag=10;
+                                break;
+                            }
+                        }
+                        if(flag==10){break;}
+                    }
+
+                }
+                if(flag!=10){
+                    timeTable.setRemixId(courseRemix.getRemixId());
+                    timeTable.setBeArranged("1");
+                    timeTableDao.save(timeTable);
+                    courseRemix.setBeArranged("1");
+                    courseRemixDao.save(courseRemix);
+
+                    List<CourseRemixRecord> byRemixId = courseRemixRecordDao.findByRemixId(courseRemix.getRemixId());
+                    for(CourseRemixRecord courseRemixRecord:byRemixId){
+                        courseRemixRecord.setBeArranged("1");
+                        courseRemixRecordDao.save(courseRemixRecord);
+                    }
+
+                    List<String> courseList = byRemixId.stream().map(e -> e.getCourseId()).collect(Collectors.toList());
+
+                    for(String courseNo:courseList){
+                        CourseExam courseExam = courseExamDao.findById(courseNo).get();
+                        courseExam.setBeArranged("1");
+                        courseExamDao.save(courseExam);
+                    }
+                    //保存执行完毕
+                    break;
+                }
 
 
             }
-
         }
 
     }

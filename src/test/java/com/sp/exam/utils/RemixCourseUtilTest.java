@@ -30,7 +30,7 @@ public class RemixCourseUtilTest {
 
     @Test
     public void contrastLimit(){
-        boolean b = RemixCourseUtil.contrastLimit("5", "8");
+        boolean b = RemixCourseUtil.contrastLimit("6", "0");
         System.out.println(b);
     }
 
