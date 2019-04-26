@@ -3,17 +3,14 @@ package com.sp.exam.utils;
 import com.sp.exam.dao.TeacherFrequencyDao;
 import com.sp.exam.enums.ArrangedEnum;
 import com.sp.exam.exception.ArrangedException;
-import com.sp.exam.pojo.Teacher;
 import com.sp.exam.pojo.TeacherFrequency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class TeacherSelectedUtil {
@@ -58,7 +55,7 @@ public class TeacherSelectedUtil {
                 int lackNum = requireNum - thisFrequency.size();
                 List<TeacherFrequency> nextFrequency=new ArrayList<>();
                 for(TeacherFrequency teacherFrequency:teachers){
-                    if(teacherFrequency.getFrequency()==i+1){
+                    if(teacherFrequency.getFrequency()==i){
                         nextFrequency.add(teacherFrequency);
                     }
                 }

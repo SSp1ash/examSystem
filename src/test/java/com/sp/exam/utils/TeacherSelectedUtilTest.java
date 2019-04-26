@@ -22,7 +22,7 @@ public class TeacherSelectedUtilTest {
 
     @Test
     public void teacherSelected() {
-        List<TeacherFrequency> teacherFrequencies = TeacherSelectedUtil.teacherSelected(4);
+        List<TeacherFrequency> teacherFrequencies = TeacherSelectedUtil.teacherSelected(20);
 
     }
 }
