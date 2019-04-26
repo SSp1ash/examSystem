@@ -15,5 +15,7 @@ public class ExamRoomArranged {
 
     private String room;
 
+    private String teacher;
+
     private String timeSemester;
 }

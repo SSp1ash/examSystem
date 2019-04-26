@@ -20,6 +20,8 @@ public class TimeTable {
 
     private String beArranged;
 
+    private String examRoomArranged;
+
     private String remixId;
 
     private String timeSemester;
