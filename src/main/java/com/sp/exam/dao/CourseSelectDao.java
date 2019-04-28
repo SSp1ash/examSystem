@@ -10,4 +10,5 @@ public interface CourseSelectDao extends JpaRepository<CourseSelect,Integer> {
     boolean existsByStuNoAndCourseNo(String stuNo, String courseNo);
 
     List<CourseSelect> findByCourseNoAndSelectTcAndTime(String courseNo,String selectTc,String time);
+
 }
