@@ -15,7 +15,8 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-fw fa-plus"></i> 选课系统 <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
                 <li class="dropdown-header">操作</li>
-                <li><a href="/exam/selectCourse/show">自动选课</a></li>
+                <li><a href="/exam/admin/selectCourse/autoSelectSite">自动选课</a></li>
+                <li><a href="/exam/admin/selectCourse/confirmSelectCourse">生成课号</a></li>
                 <li><a href="/sell/seller/product/index">选课调整</a></li>
             </ul>
         </li>

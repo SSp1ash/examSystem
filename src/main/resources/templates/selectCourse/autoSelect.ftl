@@ -35,6 +35,16 @@
     </div>
 </div>
 
+<div class="container" style="position: relative; top:50px ;">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <p class="lead text-info">
+                当选课时间过了后，需要进行<strong><em>生成课号</em></strong>操作，该操作用于生成开课单位。
+            </p>
+        </div>
+    </div>
+</div>
+
 </body>
 
 </html>

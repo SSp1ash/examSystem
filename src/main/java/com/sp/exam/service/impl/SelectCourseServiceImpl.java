@@ -1,19 +1,21 @@
 package com.sp.exam.service.impl;
 
+import com.sp.exam.converter.CourseAvailable2CourseAvailableDTO;
 import com.sp.exam.dao.*;
+import com.sp.exam.dto.CourseAvailableDTO;
 import com.sp.exam.pojo.CourseAvailable;
 import com.sp.exam.pojo.CourseSelect;
-import com.sp.exam.pojo.CourseSelectResult;
 import com.sp.exam.pojo.Student;
 import com.sp.exam.service.SelectCourseService;
 import com.sp.exam.utils.GetSemester;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SelectCourseServiceImpl implements SelectCourseService {
@@ -61,18 +63,20 @@ public class SelectCourseServiceImpl implements SelectCourseService {
                             //一个学生选好后就把已选的数量加一
                             course.setNumber(course.getNumber()+1);
                             courseAvailableDao.save(course);
-                            
+
                         }
                     }
                 }
-
             }
-
-
-
-
-
         }
 
+    @Override
+    public Page<CourseAvailableDTO> getCourseAvailableStatus(Pageable pageable) {
+        Page<CourseAvailable> courseAvailables = courseAvailableDao.findByTime(GetSemester.get(), pageable);
+        List<CourseAvailableDTO> courseAvailableDTOList= CourseAvailable2CourseAvailableDTO.converter(courseAvailables.getContent());
+        Page<CourseAvailableDTO> courseAvailableDTOPage=new PageImpl<CourseAvailableDTO>(courseAvailableDTOList,pageable,courseAvailables.getTotalElements());
+
+        return courseAvailableDTOPage;
     }
+}
 
