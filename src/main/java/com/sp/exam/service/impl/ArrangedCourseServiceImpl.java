@@ -5,7 +5,7 @@ import com.sp.exam.pojo.CourseExam;
 import com.sp.exam.pojo.CourseRemix;
 import com.sp.exam.pojo.CourseRemixRecord;
 import com.sp.exam.pojo.TimeTable;
-import com.sp.exam.service.ArrangedService;
+import com.sp.exam.service.ArrangedCourseService;
 import com.sp.exam.utils.GetSemester;
 import com.sp.exam.utils.RemixCourseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
      * @Date:   2019/4/24
      */
 @Service
-public class ArrangedServiceImpl implements ArrangedService {
+public class ArrangedCourseServiceImpl implements ArrangedCourseService {
     @Autowired
     private TimeTableDao timeTableDao;
 
@@ -238,6 +238,18 @@ public class ArrangedServiceImpl implements ArrangedService {
                 break;
             }
         }
+    }
+
+    @Override
+    public List<TimeTable> timeTableStatus(String day) {
+        List<TimeTable> timeTables = timeTableDao.findByTimeDetailLikeAndTimeSemester(day + "%", GetSemester.get());
+        return timeTables;
+    }
+
+    @Override
+    public List<CourseExam> courseExamStatus() {
+        List<CourseExam> courseExams = courseExamDao.findByTime(GetSemester.get());
+        return courseExams;
     }
 }
 

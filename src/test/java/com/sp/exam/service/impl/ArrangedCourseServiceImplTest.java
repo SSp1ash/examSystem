@@ -1,6 +1,6 @@
 package com.sp.exam.service.impl;
 
-import com.sp.exam.service.ArrangedService;
+import com.sp.exam.service.ArrangedCourseService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,19 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.*;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Slf4j
-public class ArrangedServiceImplTest {
+public class ArrangedCourseServiceImplTest {
 
     @Autowired
-    private ArrangedService arrangedService;
+    private ArrangedCourseService arrangedCourseService;
 
     @Test
     public void arrangedTimeTable() {
-        arrangedService.arrangedTimeTableByDay();
+        arrangedCourseService.arrangedTimeTableByDay();
     }
 
     @Test
@@ -33,11 +31,12 @@ public class ArrangedServiceImplTest {
 
     @Test
     public void arrangedTimeTableByTimeSlot(){
-        arrangedService.arrangedTimeTableByTimeSlot();
+        arrangedCourseService.arrangedTimeTableByTimeSlot();
     }
 
 
 
     @Test
-    public void arrangedTimeTableByNoting(){arrangedService.arrangedTimeTableByNoting();}
+    public void arrangedTimeTableByNoting(){
+        arrangedCourseService.arrangedTimeTableByNoting();}
 }

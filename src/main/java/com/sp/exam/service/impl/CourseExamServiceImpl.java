@@ -10,6 +10,7 @@ import com.sp.exam.utils.GetSemester;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,5 +46,25 @@ public class CourseExamServiceImpl implements CourseExamService {
         }
         return courseNoExam;
 
+    }
+
+    @Override
+    public List<CourseExam> showCourseExam() {
+        List<CourseSelectResult> courseSelectResults = courseSelectResultDao.findByTime(GetSemester.get());
+        List<String> courseNoExam = courseSelectResults.stream()
+                .map(e -> e.getCourseNo()).collect(Collectors.toList()).stream().distinct().collect(Collectors.toList());
+
+        List<CourseExam> courseExamList=new ArrayList<>();
+        for(String courseNo:courseNoExam){
+            if(!courseDao.findById(courseNo).get().getRemark().equals("不统考")){
+                CourseExam courseExam=new CourseExam();
+                courseExam.setWeight(courseSelectResultDao.findByCourseNo(courseNo).size());
+                courseExam.setCourseNo(courseNo);
+                courseExam.setBeArranged("0");
+                courseExam.setTime(GetSemester.get());
+                courseExamList.add(courseExam);
+            }
+        }
+        return courseExamList;
     }
 }

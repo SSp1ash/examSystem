@@ -1,5 +1,5 @@
 package com.sp.exam.service;
 
-public interface ArrangedStuSit {
+public interface ArrangedStuSitService {
     void arrangedStuSit();
 }

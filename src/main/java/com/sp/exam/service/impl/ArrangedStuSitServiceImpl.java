@@ -8,6 +8,7 @@ import com.sp.exam.pojo.CourseSelect;
 import com.sp.exam.pojo.CourseSelectResult;
 import com.sp.exam.pojo.ExamRoomArranged;
 import com.sp.exam.pojo.StuExamDetail;
+import com.sp.exam.service.ArrangedStuSitService;
 import com.sp.exam.utils.GetSemester;
 import com.sp.exam.utils.TimeDetailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
-public class ArrangedStuSitImpl implements com.sp.exam.service.ArrangedStuSit {
+public class ArrangedStuSitServiceImpl implements ArrangedStuSitService {
     @Autowired
     private StuExamDetailDao stuExamDetailDao;
 
