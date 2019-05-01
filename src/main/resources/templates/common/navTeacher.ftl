@@ -14,9 +14,7 @@
         <li>
             <a href="/exam/teacher/addStudentScore"><i class="fa fa-fw fa-list-alt"></i> 登录成绩</a>
         </li>
-        <li>
-            <a href="#"><i class="fa fa-fw fa-list-alt"></i> 查找学生成绩</a>
-        </li>
+
 
 
 

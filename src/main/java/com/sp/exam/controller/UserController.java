@@ -69,7 +69,7 @@ public class UserController {
         if(result.getUserType()==2){
             return new ModelAndView("user/teacherHome");
         }
-        if(result.getUserType()==2){
+        if(result.getUserType()==1){
             return new ModelAndView("user/studentHome");
         }
         return null;

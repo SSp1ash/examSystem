@@ -1,5 +1,6 @@
 package com.sp.exam.dao;
 
+import com.sp.exam.pojo.Student;
 import com.sp.exam.pojo.Teacher;
 import com.sp.exam.pojo.User;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,9 @@ public class UserDaoTest {
     @Autowired
     private TeacherDao teacherDao;
 
+    @Autowired
+    private StudentDao studentDao;
+
     @Test
     public void test1(){
         User user=new User();
@@ -46,6 +50,22 @@ public class UserDaoTest {
             user.setUserType(2);
             user.setUsername(teacher.getTcNo());
             user.setNickname(teacher.getTcName());
+            userDao.save(user);
+            i++;
+        }
+    }
+
+    @Test
+    public void student2User(){
+        List<Student> all = studentDao.findAll();
+        int i=0;
+        for(Student student:all){
+            User user=new User();
+            user.setUserId(String.valueOf(10000+i));
+            user.setPassword("123465");
+            user.setUserType(1);
+            user.setUsername(student.getStuNo());
+            user.setNickname(student.getStuName());
             userDao.save(user);
             i++;
         }

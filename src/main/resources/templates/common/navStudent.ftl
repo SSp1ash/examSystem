@@ -9,14 +9,12 @@
             <a href="/exam/user/userInfo"><i class="fa fa-fw fa-list-alt"></i> 我的资料</a>
         </li>
         <li>
-            <a href="#"><i class="fa fa-fw fa-list-alt"></i> 查询监考信息</a>
+            <a href="/exam/student/examStatus"><i class="fa fa-fw fa-list-alt"></i> 查询考试信息</a>
         </li>
         <li>
-            <a href="#"><i class="fa fa-fw fa-list-alt"></i> 登录成绩</a>
+            <a href="/exam/student/examScore"><i class="fa fa-fw fa-list-alt"></i> 查询成绩</a>
         </li>
-        <li>
-            <a href="#"><i class="fa fa-fw fa-list-alt"></i> 查找学生成绩</a>
-        </li>
+
 
 
 

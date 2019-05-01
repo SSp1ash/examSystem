@@ -39,16 +39,23 @@
         <div class="col-md-12 column">
             <form role="form">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">工号/学号</label><input type="text" readonly="readonly" class="form-control" style="width: 40%;" id="username" />
+                    <label for="exampleInputEmail1">工号/学号</label><input type="text" readonly="readonly" class="form-control" style="width: 40%;" id="username" "/>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">昵称</label><input type="text" class="form-control" style="width: 40%;" id="nickname" />
+                    <label for="exampleInputEmail1">昵称</label><input type="text" class="form-control" style="width: 40%;" id="nickname" value="${userName}" />
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">密码</label><input type="password" class="form-control" style="width: 40%;" id="oldPassword" />
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">确认密码</label><input type="password" class="form-control" style="width: 40%;" id="newPassword" />
+                </div>
+                <div class="container">
+                    <div class="row clearfix">
+                        <div class="col-md-12 column">
+                            <button type="button" class="btn btn-lg btn-primary">提交修改</button>
+                        </div>
+                    </div>
                 </div>
 
             </form>
