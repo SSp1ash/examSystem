@@ -11,6 +11,8 @@ public class User {
     @Id
     private String userId;
 
+    private String nickname;
+
     private String username;
 
     private String password;

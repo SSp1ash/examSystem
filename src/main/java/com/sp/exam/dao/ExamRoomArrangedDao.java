@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ExamRoomArrangedDao extends JpaRepository<ExamRoomArranged,Integer> {
     List<ExamRoomArranged> findByTimeSemester(String timeSemester);
+
+    List<ExamRoomArranged> findByTeacherLikeAndTimeSemester(String teacher,String timeSemester);
 }

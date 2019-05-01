@@ -32,7 +32,7 @@
         </li>
 
         <li>
-            <a href="#"><i class="fa fa-fw fa-list-alt"></i> 登出</a>
+            <a href="/exam"><i class="fa fa-fw fa-list-alt"></i> 登出</a>
         </li>
     </ul>
 

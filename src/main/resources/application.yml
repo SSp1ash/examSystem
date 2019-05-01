@@ -10,3 +10,8 @@ spring:
     password: 123456
   jpa:
     show-sql: true
+
+    redis:
+      host: 192.168.0.103
+      port: 6379
+

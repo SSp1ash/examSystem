@@ -15,8 +15,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(User user) {
-        User resultUser = userDao.findByUsername(user.getUsername());
-        if(user.getPassword().equals(resultUser.getPassword())&&user.getUserType()==resultUser.getUserType()){
+        User resultUser = userDao.findByUsernameAndPasswordAndUserType(user.getUsername(),user.getPassword(),user.getUserType());
+        if(resultUser!=null){
             return resultUser;
         }else {
             throw new LoginException(ResultEnum.ACCOUNT_WRONG);

@@ -21,6 +21,8 @@ public class CourseSelect {
     //选择教师的No
     private String selectTc;
 
+    private Double score;
+
     //格式还是比如201520161
     private String time;
 

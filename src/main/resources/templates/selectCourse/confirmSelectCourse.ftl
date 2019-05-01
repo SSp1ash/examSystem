@@ -12,7 +12,7 @@
         <div class="col-md-12 column">
             <div class="page-header">
                 <h1>
-                    生成课号<small>&nbsp;&nbsp;&nbsp;管理员@SSp1ash</small>
+                    生成课号<small>&nbsp;&nbsp;&nbsp;${userType}@${userName}</small>
                 </h1>
             </div>
         </div>

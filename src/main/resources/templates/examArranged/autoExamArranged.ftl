@@ -10,7 +10,7 @@
         <div class="col-md-12 column">
             <div class="page-header">
                 <h1>
-                    自动排考<small>&nbsp;&nbsp;&nbsp;管理员@SSp1ash</small>
+                    自动排考<small>&nbsp;&nbsp;&nbsp;${userType}@${userName}</small>
                 </h1>
             </div>
         </div>
