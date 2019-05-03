@@ -51,8 +51,10 @@
 <script>
     $('#select').click(function(){
         $.ajax({url:"/exam/admin/selectCourse/auto",
-            dataType:JSON,
-            success:alert("选课成功")
+            dataType:"JSON",
+            success:function () {
+                alert("选课成功")
+            }
         });
     });
 </script>

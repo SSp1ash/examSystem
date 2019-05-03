@@ -3,12 +3,11 @@ package com.sp.exam.controller;
 import com.sp.exam.VO.ResultVO;
 import com.sp.exam.constant.CookieConstant;
 import com.sp.exam.constant.RedisConstant;
+import com.sp.exam.dao.CourseDao;
 import com.sp.exam.dao.UserDao;
 import com.sp.exam.dto.CourseAvailableDTO;
 import com.sp.exam.pojo.CourseAvailable;
-import com.sp.exam.service.SelectCourseResultService;
-import com.sp.exam.service.SelectCourseService;
-import com.sp.exam.service.UserService;
+import com.sp.exam.service.*;
 import com.sp.exam.utils.CookieUtil;
 import com.sp.exam.utils.ResultVOUtil;
 import com.sp.exam.utils.UserTypeUtil;
@@ -18,10 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
@@ -44,6 +40,15 @@ public class SelectCourseController {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private TeacherAffairService teacherAffairService;
+
+    @Autowired
+    private CourseDao courseDao;
+
+    @Autowired
+    private CourseAvailableService courseAvailableService;
+
     @GetMapping("/autoSelectSite")
     public ModelAndView show(Map<String,Object> map,HttpServletRequest request){
         Cookie cookie= CookieUtil.get(request, CookieConstant.TOKEN);
@@ -56,10 +61,10 @@ public class SelectCourseController {
 
     @GetMapping("/auto")
     @ResponseBody
-    public String auto(){
+    public ResultVO auto(){
         selectCourseService.autoSelectCourse();
         log.info("选课成功");
-        return "Success";
+        return ResultVOUtil.success();
     }
 
     @GetMapping("/confirmSelectCourse")
@@ -76,12 +81,21 @@ public class SelectCourseController {
         map.put("courseAvailableStatusPage",courseAvailableStatusPage);
         map.put("currentPage",page);
         map.put("size",size);
+        map.put("teachers",teacherAffairService.getAllTeacher());
+        map.put("courses",courseDao.findAll());
         return new ModelAndView("selectCourse/confirmSelectCourse",map);
     }
 
     @GetMapping("/confirmSelectCourse/confirm")
     public ResultVO confirmChoose(){
         selectCourseResultService.summary();
+        return ResultVOUtil.success();
+    }
+
+    @PostMapping("/addCourseAvailable")
+    @ResponseBody
+    public ResultVO addCourseAvailable(String tcNo,String courseNo,Integer capacity){
+        courseAvailableService.addCourseAvailable(tcNo,courseNo,capacity);
         return ResultVOUtil.success();
     }
 }

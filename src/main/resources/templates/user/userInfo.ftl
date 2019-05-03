@@ -37,23 +37,26 @@
 <div class="container">
     <div class="row clearfix">
         <div class="col-md-12 column">
-            <form role="form">
+            <form name="modifyUser" id="modifyUser" role="form">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">工号/学号</label><input type="text" readonly="readonly" class="form-control" style="width: 40%;" id="username" "/>
+                    <label for="exampleInputEmail1">工号/学号</label><input type="text" readonly="readonly" class="form-control" style="width: 40%;" id="username" value="${userNo}"/>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">昵称</label><input type="text" class="form-control" style="width: 40%;" id="nickname" value="${userName}" />
+                    <label for="exampleInputEmail1">昵称</label><input type="text" class="form-control" style="width: 40%;" name="nickName" value="${userName}" />
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">密码</label><input type="password" class="form-control" style="width: 40%;" id="oldPassword" />
+                    <label for="exampleInputPassword1">原密码</label><input type="password" class="form-control" style="width: 40%;" name="oldPassword" />
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">确认密码</label><input type="password" class="form-control" style="width: 40%;" id="newPassword" />
+                    <label for="exampleInputPassword1">新密码</label><input type="password" class="form-control" style="width: 40%;" name="newPassword" />
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">确认密码</label><input type="password" class="form-control" style="width: 40%;" name="renewPassword" />
                 </div>
                 <div class="container">
                     <div class="row clearfix">
                         <div class="col-md-12 column">
-                            <button type="button" class="btn btn-lg btn-primary">提交修改</button>
+                            <button type="button" class="btn btn-lg btn-primary" id="modify">提交修改</button>
                         </div>
                     </div>
                 </div>
@@ -67,3 +70,21 @@
 
 
 </html>
+<script>
+$('#modify').click(function(event){
+        event.preventDefault();
+        var formData= new FormData(document.getElementById("modifyUser"));
+
+        $.ajax({
+            type:"post",
+            url:"/exam/user/modifyUser",
+            data:formData,
+            contentType: false,
+            processData: false,
+            dataType:"json",
+            success: function (data) {
+                    window.location.reload();
+            }
+        });
+    });
+</script>

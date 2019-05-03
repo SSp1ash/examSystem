@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface LimitDao extends JpaRepository<Limit,Integer> {
     List<Limit> findByLimitId(Integer limitId);
+
+    Boolean existsByLimitIdAndMajorNo(Integer limitId,String majorNo);
 }

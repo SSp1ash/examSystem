@@ -25,8 +25,7 @@
             <ul class="dropdown-menu" role="menu">
                 <li class="dropdown-header">操作</li>
                 <li><a href="/exam/admin/examArranged/autoArranged">自动排考</a></li>
-                <li><a href="/sell/seller/category/index">手动排考</a></li>
-                <li><a href="/sell/seller/category/index">查看考试日程</a></li>
+                <li><a href="/sell/seller/category/index">手动调整排考</a></li>
 
             </ul>
         </li>

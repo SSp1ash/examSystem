@@ -8,6 +8,7 @@ import com.sp.exam.pojo.CourseSelect;
 import com.sp.exam.pojo.Student;
 import com.sp.exam.service.SelectCourseService;
 import com.sp.exam.utils.GetSemester;
+import com.sp.exam.utils.JudgeSelectCourseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -46,7 +47,8 @@ public class SelectCourseServiceImpl implements SelectCourseService {
             for (CourseAvailable course:byTime){
                 //先人数满没满，然后判断学生是否该选这门课，然后判断学生是否选择了该课，最后判断学期是否符合
                 if(course.getNumber()<course.getCapacity()
-                        &&courseDao.findById(course.getCourseNo()).get().getLimit()==0
+                        //&&courseDao.findById(course.getCourseNo()).get().getLimit()==0    变为只要符合就可以选
+                        && JudgeSelectCourseUtil.judege(stu,courseDao.findById(course.getCourseNo()).get().getLimit())
                         && GetSemester.getStudentSemester(stu.getStuGrade())
                         .equals(courseDao.findById(course.getCourseNo()).get().getCourseSemester())){
 

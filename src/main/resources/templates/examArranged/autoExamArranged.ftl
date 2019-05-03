@@ -47,10 +47,12 @@
                 </tr>
                 </thead>
                 <tbody>
+
                 <tr><td>上午一</td></tr>
                 <tr><td>上午二</td></tr>
                 <tr><td>下午一</td></tr>
                 <tr><td>下午二</td></tr>
+
 
                 <#list timetables as timetable>
                 <tr>
@@ -224,8 +226,7 @@
     </div>
 </div>
 
-<#if courseExams??>
-
+<#if !(courseExams?has_content)>
 <script>
     alert("系统检测到还没进行确认考试，将进行考试科目确认");
     function remind(){

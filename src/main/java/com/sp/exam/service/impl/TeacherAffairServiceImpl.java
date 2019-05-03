@@ -5,6 +5,7 @@ import com.sp.exam.dto.StudentScoreDTO;
 import com.sp.exam.dto.TeacherInvigilateDTO;
 import com.sp.exam.pojo.CourseSelect;
 import com.sp.exam.pojo.ExamRoomArranged;
+import com.sp.exam.pojo.Teacher;
 import com.sp.exam.service.TeacherAffairService;
 import com.sp.exam.utils.GetSemester;
 import com.sp.exam.utils.TeacherNameUtil;
@@ -31,6 +32,9 @@ public class TeacherAffairServiceImpl implements TeacherAffairService {
 
     @Autowired
     private StudentDao studentDao;
+
+    @Autowired
+    private TeacherDao teacherDao;
 
     @Override
     public List<TeacherInvigilateDTO> findInvigilate(String teacherId) {
@@ -73,5 +77,11 @@ public class TeacherAffairServiceImpl implements TeacherAffairService {
         courseSelect.setScore(score);
         courseSelectDao.save(courseSelect);
         return courseSelect;
+    }
+
+    @Override
+    public List<Teacher> getAllTeacher() {
+        List<Teacher> all = teacherDao.findAll();
+        return all;
     }
 }

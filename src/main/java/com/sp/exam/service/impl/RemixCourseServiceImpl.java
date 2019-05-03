@@ -67,8 +67,8 @@ public class RemixCourseServiceImpl implements RemixCourseService {
         }
 
         //2.开始把剩下的可以组合的课进行组合
-        if(courseExam.size()>0){
-            for(int i=1;i<courseExam.size();i++) {
+        while(courseExam.size()>1){
+            for(int i=1;courseExam.size()>1;i++) {
                 boolean contrast = RemixCourseUtil.contrast(courseDao.findById(courseExam.get(0).getCourseNo()).get()
                         , courseDao.findById(courseExam.get(i).getCourseNo()).get());
                 //如果可以组合就把这两个从list里面删除掉然后写入remix表
@@ -98,6 +98,7 @@ public class RemixCourseServiceImpl implements RemixCourseService {
                     //然后把这两个从list里面删除了
                     courseExam.remove(0);
                     courseExam.remove(i - 1);
+                    i=0;
                     continue;
                 }
                 //如果没找到匹配的就直接把他像公共课一样处理
@@ -117,7 +118,7 @@ public class RemixCourseServiceImpl implements RemixCourseService {
                     courseRemixRecordDao.save(courseRemixRecord);
                     courseExam.remove(0);
                     //把i复位
-                    i = 1;
+                    i = 0;
                     continue;
                 }
             }

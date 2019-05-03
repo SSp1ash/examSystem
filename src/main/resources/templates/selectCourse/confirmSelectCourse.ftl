@@ -32,6 +32,70 @@
 <div class="container">
     <div class="row clearfix">
         <div class="col-md-12 column">
+            <button id="modal-662078" href="#modal-container-662078" role="button" class="btn btn-default btn-primary" data-toggle="modal">添加课号</button>
+
+            <div class="modal fade" id="modal-container-662078" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title" id="myModalLabel">
+                                标题
+                            </h4>
+                        </div>
+                        <div class="container">
+                            <div class="row clearfix">
+                                <div class="col-md-12 column">
+                                    <form name="addCourseAvailable" id="addCourseAvailable" class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <label for="teacher" class="col-sm-2 control-label">教师</label>
+
+                                                <select class="form-control" style="width: 200px;" name="tcNo">
+                                                    <#list teachers as teacher>
+                                                        <option value="${teacher.getTcNo()}">${teacher.getTcName()}${teacher.getTcNo()}</option>
+                                                    </#list>
+                                                </select>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="course" class="col-sm-2 control-label">课程</label>
+
+                                            <select class="form-control" style="width: 200px;" name="courseNo">
+                                                    <#list courses as course>
+                                                        <option value="${course.getCourseNo()}">${course.getCourseName()}${course.getCourseNo()}</option>
+                                                    </#list>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="course" class="col-sm-2 control-label">容量</label>
+                                            <div class="col-sm-1">
+                                                <input type="text" name="capacity" class="form-control" id="capacity" />
+                                            </div>
+
+                                        </div>
+
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button type="button" class="btn btn-primary" id="add">添加</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
             <table class="table table-bordered table-hover table-condensed">
                 <thead>
                 <tr>
@@ -116,6 +180,23 @@
         $.ajax({url:"/exam/admin/selectCourse/confirmSelectCourse/confirm",
             dataType:JSON,
             success:alert("确定成功")
+        });
+    });
+
+    $('#add').click(function(event){
+        event.preventDefault();
+        var formData= new FormData(document.getElementById("addCourseAvailable"));
+
+        $.ajax({
+            type:"post",
+            url:"/exam/admin/selectCourse/addCourseAvailable",
+            data:formData,
+            contentType: false,
+            processData: false,
+            dataType:"json",
+            success: function () {
+                    window.location.reload();
+            }
         });
     });
 </script>
