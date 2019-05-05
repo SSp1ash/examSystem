@@ -48,22 +48,50 @@
                 </thead>
                 <tbody>
 
-                <tr><td>上午一</td></tr>
-                <tr><td>上午二</td></tr>
-                <tr><td>下午一</td></tr>
-                <tr><td>下午二</td></tr>
-
-
-                <#list timetables as timetable>
                 <tr>
-                    <#if timetable.getBeArranged()=="1">
+                    <td>上午一</td>
+                    <#list timetables1 as timetable>
+                        <#if timetable.getBeArranged()=="1">
                         <td>${timetable.getRemixId()}</td>
-                    </#if>
-                     <#if timetable.getBeArranged()=="0">
+                        </#if>
+                        <#if timetable.getBeArranged()=="0">
                         <td>可排课</td>
-                     </#if>
+                        </#if>
+                    </#list>
                 </tr>
-                </#list>
+                <tr>
+                    <td>上午二</td>
+                    <#list timetables2 as timetable>
+                        <#if timetable.getBeArranged()=="1">
+                        <td>${timetable.getRemixId()}</td>
+                        </#if>
+                        <#if timetable.getBeArranged()=="0">
+                        <td>可排课</td>
+                        </#if>
+                    </#list>
+                </tr>
+                <tr>
+                    <td>下午一</td>
+                    <#list timetables3 as timetable>
+                        <#if timetable.getBeArranged()=="1">
+                        <td>${timetable.getRemixId()}</td>
+                        </#if>
+                        <#if timetable.getBeArranged()=="0">
+                        <td>可排课</td>
+                        </#if>
+                    </#list>
+                </tr>
+                <tr>
+                    <td>下午二</td>
+                    <#list timetables4 as timetable>
+                        <#if timetable.getBeArranged()=="1">
+                        <td>${timetable.getRemixId()}</td>
+                        </#if>
+                        <#if timetable.getBeArranged()=="0">
+                        <td>可排课</td>
+                        </#if>
+                    </#list>
+                </tr>
 
 
                 </tbody>
@@ -158,6 +186,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="container">
     <div class="row clearfix">

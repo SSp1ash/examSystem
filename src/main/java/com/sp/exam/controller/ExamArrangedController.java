@@ -59,12 +59,19 @@ public class ExamArrangedController {
 
     @GetMapping("/autoArranged")
     public ModelAndView autoArranged(Map<String,Object> map,
-                                     @RequestParam(value = "day",defaultValue = "1")String day,
+                                     @RequestParam(value = "week",defaultValue = "1")String week,
                                      HttpServletRequest request){
-        List<TimeTable> timeTables = arrangedCourseService.timeTableStatus(day);
+       // List<TimeTable> timeTables = arrangedCourseService.timeTableStatus(week);
+        List<TimeTable> timeTables1 = arrangedCourseService.timeTablePoint(week, "1");
+        List<TimeTable> timeTables2 = arrangedCourseService.timeTablePoint(week, "2");
+        List<TimeTable> timeTables3 = arrangedCourseService.timeTablePoint(week, "3");
+        List<TimeTable> timeTables4 = arrangedCourseService.timeTablePoint(week, "4");
         List<CourseExam> courseExams=arrangedCourseService.courseExamStatus();
         List<CourseExam> courseExamShows=courseExamService.showCourseExam();
-        map.put("timetables",timeTables);
+        map.put("timetables1",timeTables1);
+        map.put("timetables2",timeTables2);
+        map.put("timetables3",timeTables3);
+        map.put("timetables4",timeTables4);
         map.put("courseExams",courseExams);
         map.put("courseExamShows",courseExamShows);
         Cookie cookie= CookieUtil.get(request, CookieConstant.TOKEN);

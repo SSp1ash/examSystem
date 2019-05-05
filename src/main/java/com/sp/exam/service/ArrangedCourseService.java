@@ -12,7 +12,10 @@ public interface ArrangedCourseService {
 
     void arrangedTimeTableByNoting();
 
-    List<TimeTable> timeTableStatus(String day);
+    List<TimeTable> timeTableStatus(String week);
 
     List<CourseExam> courseExamStatus();
+
+    //得到某一时间点的所有课程
+    List<TimeTable> timeTablePoint(String week,String x);
 }

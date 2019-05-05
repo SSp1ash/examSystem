@@ -19,7 +19,7 @@
 
 
         <li>
-            <a href="/exam"><i class="fa fa-fw fa-list-alt"></i> 登出</a>
+            <a href="/exam/user/logout"><i class="fa fa-fw fa-list-alt"></i> 登出</a>
         </li>
     </ul>
 

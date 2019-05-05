@@ -11,6 +11,21 @@
         <li>
             <a href="#"><i class="fa fa-fw fa-list-alt"></i> 全局管理</a>
         </li>
+
+        <li class="dropdown open">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-fw fa-plus"></i> 数据管理 <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+                <li class="dropdown-header">操作</li>
+                <li><a href="/exam/admin/courseData">课程信息</a></li>
+                <li><a href="/exam/admin/studentData">学生信息</a></li>
+                <li><a href="/exam/admin/teacherData">教师信息</a></li>
+                <li><a href="/exam/admin/examRoomData">考场信息</a></li>
+                <li class="dropdown-header"></li>
+
+
+            </ul>
+        </li>
+
         <li class="dropdown open">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-fw fa-plus"></i> 选课系统 <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
@@ -18,6 +33,7 @@
                 <li><a href="/exam/admin/selectCourse/autoSelectSite">自动选课</a></li>
                 <li><a href="/exam/admin/selectCourse/confirmSelectCourse">生成课号</a></li>
                 <li><a href="/sell/seller/product/index">选课调整</a></li>
+                <li class="dropdown-header"></li>
             </ul>
         </li>
         <li class="dropdown open">
@@ -26,12 +42,13 @@
                 <li class="dropdown-header">操作</li>
                 <li><a href="/exam/admin/examArranged/autoArranged">自动排考</a></li>
                 <li><a href="/sell/seller/category/index">手动调整排考</a></li>
+                <li class="dropdown-header"></li>
 
             </ul>
         </li>
 
         <li>
-            <a href="/exam"><i class="fa fa-fw fa-list-alt"></i> 登出</a>
+            <a href="/exam/user/logout"><i class="fa fa-fw fa-list-alt"></i> 登出</a>
         </li>
     </ul>
 

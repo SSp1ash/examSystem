@@ -241,8 +241,8 @@ public class ArrangedCourseServiceImpl implements ArrangedCourseService {
     }
 
     @Override
-    public List<TimeTable> timeTableStatus(String day) {
-        List<TimeTable> timeTables = timeTableDao.findByTimeDetailLikeAndTimeSemester(day + "%", GetSemester.get());
+    public List<TimeTable> timeTableStatus(String week) {
+        List<TimeTable> timeTables = timeTableDao.findByTimeDetailLikeAndTimeSemester(week + "%", GetSemester.get());
         return timeTables;
     }
 
@@ -250,6 +250,12 @@ public class ArrangedCourseServiceImpl implements ArrangedCourseService {
     public List<CourseExam> courseExamStatus() {
         List<CourseExam> courseExams = courseExamDao.findByTime(GetSemester.get());
         return courseExams;
+    }
+
+    @Override
+    public List<TimeTable> timeTablePoint(String week, String x) {
+        List<TimeTable> result = timeTableDao.findByTimeDetailLikeAndTimeSemester(week + "%" + x, GetSemester.get());
+        return result;
     }
 }
 

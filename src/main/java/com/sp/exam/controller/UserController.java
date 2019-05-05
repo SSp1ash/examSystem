@@ -101,4 +101,11 @@ public class UserController {
         return userService.modifyUser(modifyUserForm);
     }
 
+    @GetMapping("/logout")
+    public ModelAndView logout(HttpServletRequest request){
+        Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
+        redisTemplate.delete(String.format(RedisConstant.TOKEN_PREFIX,cookie.getValue()));
+        return new ModelAndView("user/index");
+    }
+
 }

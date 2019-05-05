@@ -2,6 +2,7 @@ package com.sp.exam.pojo;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -17,6 +18,7 @@ public class Course {
     private String courseSemester;
 
     //字段为0为公共无限制必修课程，1为学生自选选修课，2为专业课不能跨选
+    @Column(name="cLimit")
     private Integer limit;
 
     private String remark;
