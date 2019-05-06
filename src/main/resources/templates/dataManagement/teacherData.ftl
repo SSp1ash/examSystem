@@ -32,7 +32,7 @@
 <div class="container">
     <div class="row clearfix">
         <div class="col-md-12 column">
-            <button id="modal-662078" href="#modal-container-662078" role="button" class="btn btn-default btn-primary" data-toggle="modal">添加教师</button>
+            <button id="modal-662078" href="#modal-container-662078" role="button" class="btn btn-default btn-primary addButton" data-toggle="modal">添加教师</button>
 
             <div class="modal fade" id="modal-container-662078" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -81,7 +81,6 @@
                                             </div>
                                         </div>
 
-
                                     </form>
                                 </div>
                             </div>
@@ -110,6 +109,7 @@
                     <th>性别</th>
                     <th>学院</th>
                     <th>电话</th>
+                    <th colspan="2">操作</th>
                 </tr>
                 </thead>
             <tbody>
@@ -121,7 +121,8 @@
                     <td>${teacher.getTcGender()}</td>
                     <td>${teacher.getTcInst()}</td>
                     <td>${teacher.getTcTel()}</td>
-
+                    <td><a role="button" class="btn btn-default btn-primary" data-toggle="modal" href="deleteTeacher?tcNo=${teacher.getTcNo()}">删除</a></td>
+                    <td><a role="button" class="btn btn-default btn-primary modifyTeacher" data-toggle="modal" href="#modal-container-662078">修改</a></td>
 
                 </tr>
                 </tbody>
@@ -153,6 +154,30 @@
 
 
 <script>
+    $(".addButton").click(function (event) {
+        event.preventDefault();
+        $("#tcNo").val("");
+        $("#tcName").val("");
+        $("#tcGender").val("");
+        $("#tcInst").val("");
+        $("#tcTel").val("");
+    })
+
+
+    $('.modifyTeacher').click(function (event) {
+        event.preventDefault();
+        var tcNo = $(this).parents("tr").find("td").eq(0).html();
+        var tcName=$(this).parents("tr").find("td").eq(1).html();
+        var tcGender = $(this).parents("tr").find("td").eq(2).html();
+        var tcInst=$(this).parents("tr").find("td").eq(3).html();
+        var tcTel = $(this).parents("tr").find("td").eq(4).html();
+        $("#tcNo").val(tcNo);
+        $("#tcName").val(tcName);
+        $("#tcGender").val(tcGender);
+        $("#tcInst").val(tcInst);
+        $("#tcTel").val(tcTel);
+    })
+
 
     $('#add').click(function(event){
         event.preventDefault();

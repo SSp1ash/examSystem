@@ -92,4 +92,24 @@ public class DataManagementServiceImpl implements DataManagementService {
     public void addExamRoom(ExamRoom examRoom) {
         examRoomDao.save(examRoom);
     }
+
+    @Override
+    public void deleteCourse(String courseNo) {
+        courseDao.deleteById(courseNo);
+    }
+
+    @Override
+    public void deleteStudent(String stuNo) {
+        studentDao.deleteById(stuNo);
+    }
+
+    @Override
+    public void deleteTeacher(String tcNo) {
+        teacherDao.deleteById(tcNo);
+    }
+
+    @Override
+    public void deleteExamRoom(Integer id) {
+        examRoomDao.deleteById(id);
+    }
 }

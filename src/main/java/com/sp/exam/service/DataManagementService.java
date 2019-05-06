@@ -32,4 +32,12 @@ public interface DataManagementService {
 
     void addExamRoom(ExamRoom examRoom);
 
+    void deleteCourse(String courseNo);
+
+    void deleteStudent(String stuNo);
+
+    void deleteTeacher(String tcNo);
+
+    void deleteExamRoom(Integer id);
+
 }

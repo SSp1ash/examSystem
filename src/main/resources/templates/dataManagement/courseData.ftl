@@ -32,7 +32,7 @@
 <div class="container">
     <div class="row clearfix">
         <div class="col-md-12 column">
-            <button id="modal-662078" href="#modal-container-662078" role="button" class="btn btn-default btn-primary" data-toggle="modal">添加课程</button>
+            <button id="modal-662078" href="#modal-container-662078" role="button" class="btn btn-default btn-primary addButton" data-toggle="modal">添加课程</button>
 
             <div class="modal fade" id="modal-container-662078" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -68,6 +68,7 @@
                                         <div class="form-group">
                                             <label for="course" class="col-sm-2 control-label">课程限制代号</label>
                                             <select class="form-control" style="width: 200px;" name="limit">
+                                                <option value="0">0</option>
                                                     <#list limits as limit>
                                                         <option value="${limit}">${limit}</option>
                                                     </#list>
@@ -109,6 +110,7 @@
                     <th>课程推荐学期</th>
                     <th>课程限制代号</th>
                     <th>备注</th>
+                    <th colspan="2">操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -122,8 +124,11 @@
                     <#if course.getRemark()=="0">
                     <td>无</td>
                     <#else ><td>${course.getRemark()}</td>
-                </#if>
+                    </#if>
+                    <td><a role="button" class="btn btn-default btn-primary" data-toggle="modal" href="deleteCourse?courseNo=${course.getCourseNo()}">删除</a></td>
+                    <td><a role="button" class="btn btn-default btn-primary modifyCourse" data-toggle="modal" href="#modal-container-662078">修改</a></td>
                 </tr>
+
                 </tbody>
             </#list>
             </table>
@@ -153,6 +158,31 @@
 
 
 <script>
+    $(".addButton").click(function (event) {
+        event.preventDefault();
+        $("#courseNo").val("");
+        $("#courseName").val("");
+        $("#courseSemester").val("");
+        $("#limit").val("");
+        $("#remark").val("无");
+    })
+
+
+    $('.modifyCourse').click(function (event) {
+        event.preventDefault();
+        var courseNo = $(this).parents("tr").find("td").eq(0).html();
+        var courseName=$(this).parents("tr").find("td").eq(1).html();
+        var courseSemester = $(this).parents("tr").find("td").eq(2).html();
+        var limit=$(this).parents("tr").find("td").eq(3).html();
+        var remark = $(this).parents("tr").find("td").eq(4).html();
+        $("#courseNo").val(courseNo);
+        $("#courseName").val(courseName);
+        $("#courseSemester").val(courseSemester);
+        $("#limit").val(limit);
+        $("#remark").val(remark);
+    })
+
+
 
     $('#add').click(function(event){
         event.preventDefault();

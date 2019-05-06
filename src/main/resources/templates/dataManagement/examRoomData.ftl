@@ -32,7 +32,7 @@
 <div class="container">
     <div class="row clearfix">
         <div class="col-md-12 column">
-            <button id="modal-662078" href="#modal-container-662078" role="button" class="btn btn-default btn-primary" data-toggle="modal">添加考场</button>
+            <button id="modal-662078" href="#modal-container-662078" role="button" class="btn btn-default btn-primary addButton" data-toggle="modal">添加考场</button>
 
             <div class="modal fade" id="modal-container-662078" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -47,6 +47,12 @@
                             <div class="row clearfix">
                                 <div class="col-md-12 column">
                                     <form name="addExamRoom" id="addExamRoom" class="form-horizontal" role="form">
+                                        <div style="display: none" class="form-group">
+                                            <label for="course" class="col-sm-2 control-label">id</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" name="id" class="form-control" id="id" />
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <label for="course" class="col-sm-2 control-label">教室号</label>
                                             <div class="col-sm-3">
@@ -101,15 +107,16 @@
                 <tr>
                     <th>教室号</th>
                     <th>地点</th>
-                    <th>容量<th>
+                    <th>容量</th>
                     <th>状态</th>
+                    <th colspan="2">操作</th>
                 </tr>
                 </thead>
             <tbody>
                 <#list allExamRoom.getContent() as examRoom>
 
                 <tr>
-
+                    <td style="display: none">${examRoom.getId()}</td>
                     <td>${examRoom.getRoomNo()}</td>
                     <td>${examRoom.getRoomPlace()}</td>
                     <td>${examRoom.getCapacity()}</td>
@@ -117,8 +124,10 @@
                         <td>可用</td>
                     <#else ><td>不可用</td>
                     </#if>
+            <td><a role="button" class="btn btn-default btn-primary" data-toggle="modal" href="deleteExamRoom?id=${examRoom.getId()}">删除</a></td>
+            <td><a role="button" class="btn btn-default btn-primary modifyExamRoom" data-toggle="modal" href="#modal-container-662078">修改</a></td>
                 </tr>
-                </#list>
+            </#list>
                 </tbody>
 
 
@@ -149,6 +158,30 @@
 
 
 <script>
+    $(".addButton").click(function (event) {
+        event.preventDefault();
+        $("#id").val("");
+        $("#roomNo").val("");
+        $("#roomPlace").val("");
+        $("#capacity").val("");
+        $("#available").val("可用");
+    })
+
+
+    $('.modifyExamRoom').click(function (event) {
+        event.preventDefault();
+        var id = $(this).parents("tr").find("td").eq(0).html();
+        var roomNo = $(this).parents("tr").find("td").eq(1).html();
+        var roomPlace=$(this).parents("tr").find("td").eq(2).html();
+        var capacity = $(this).parents("tr").find("td").eq(3).html();
+        var available=$(this).parents("tr").find("td").eq(4).html();
+        $("#id").val(id);
+        $("#roomNo").val(roomNo);
+        $("#roomPlace").val(roomPlace);
+        $("#capacity").val(capacity);
+        $("#available").val(available);
+    })
+
 
     $('#add').click(function(event){
         event.preventDefault();

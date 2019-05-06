@@ -32,7 +32,7 @@
 <div class="container">
     <div class="row clearfix">
         <div class="col-md-12 column">
-            <button id="modal-662078" href="#modal-container-662078" role="button" class="btn btn-default btn-primary" data-toggle="modal">添加学生</button>
+            <button id="modal-662078" href="#modal-container-662078" role="button" class="btn btn-default btn-primary addButton" data-toggle="modal">添加学生</button>
 
             <div class="modal fade" id="modal-container-662078" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -71,6 +71,12 @@
                                                 <div class="col-sm-3">
                                                     <input type="text" name="stuGrade" class="form-control" id="stuGrade" />
                                                 </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="course" class="col-sm-2 control-label">专业</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" name="stuMajor" class="form-control" id="stuMajor" />
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="course" class="col-sm-2 control-label">学院</label>
@@ -119,6 +125,7 @@
                     <th>专业</th>
                     <th>学院</th>
                     <th>状态</th>
+                    <th colspan="2">操作</th>
                 </tr>
                 </thead>
             <tbody>
@@ -135,6 +142,9 @@
                     <td>正常</td>
                     <#else ><td>不在校</td>
                     </#if>
+
+                    <td><a role="button" class="btn btn-default btn-primary" data-toggle="modal" href="deleteStudent?stuNo=${student.getStuNo()}">删除</a></td>
+                    <td><a role="button" class="btn btn-default btn-primary modifyStudent" data-toggle="modal" href="#modal-container-662078">修改</a></td>
                 </tr>
                 </tbody>
                 </#list>
@@ -165,6 +175,36 @@
 
 
 <script>
+    $(".addButton").click(function (event) {
+        event.preventDefault();
+        $("#stuNo").val("");
+        $("#stuName").val("");
+        $("#stuGender").val("");
+        $("#stuGrade").val("");
+        $("#stuMajor").val("");
+        $("#stuInstitution").val("");
+        $("#resident").val("正常");
+    })
+
+
+    $('.modifyStudent').click(function (event) {
+        event.preventDefault();
+        var stuNo = $(this).parents("tr").find("td").eq(0).html();
+        var stuName=$(this).parents("tr").find("td").eq(1).html();
+        var stuGender = $(this).parents("tr").find("td").eq(2).html();
+        var stuGrade=$(this).parents("tr").find("td").eq(3).html();
+        var stuMajor = $(this).parents("tr").find("td").eq(4).html();
+        var stuInstitution = $(this).parents("tr").find("td").eq(5).html();
+        var resident = $(this).parents("tr").find("td").eq(6).html();
+        $("#stuNo").val(stuNo);
+        $("#stuName").val(stuName);
+        $("#stuGender").val(stuGender);
+        $("#stuGrade").val(stuGrade);
+        $("#stuMajor").val(stuMajor);
+        $("#stuInstitution").val(stuInstitution);
+        $("#resident").val(resident);
+    })
+
 
     $('#add').click(function(event){
         event.preventDefault();

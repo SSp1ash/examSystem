@@ -112,7 +112,7 @@ public class DataManagementController {
     @PostMapping("/addCourse")
     @ResponseBody
     public ResultVO addCourse(Course course){
-        if(course.getRemark()==null){
+        if(course.getRemark().equals("无")){
             course.setRemark("0");
         }
         dataManagementService.addCourse(course);
@@ -122,7 +122,12 @@ public class DataManagementController {
     @PostMapping("/addStudent")
     @ResponseBody
     public ResultVO addStudent(Student student){
-
+        if(student.getResident().equals("正常")){
+            student.setResident("1");
+        }
+        if(student.getResident().equals("不在校")){
+            student.setResident("0");
+        }
         dataManagementService.addStudent(student);
         return ResultVOUtil.success();
     }
@@ -138,10 +143,51 @@ public class DataManagementController {
     @PostMapping("/addExamRoom")
     @ResponseBody
     public ResultVO addExamRoom(ExamRoom examRoom,String capacity1){
+        if(examRoom.getAvailable().equals("可用")){
+            examRoom.setAvailable(1);
+        }
+        if(examRoom.getAvailable().equals("不可用")){
+            examRoom.setAvailable(0);
+        }
         Integer capacity=Integer.valueOf(capacity1);
         examRoom.setCapacity(capacity);
         dataManagementService.addExamRoom(examRoom);
         return ResultVOUtil.success();
+    }
+
+    @GetMapping("/deleteCourse")
+    public ModelAndView deleteCourse(Map<String,Object> map,String courseNo){
+
+        dataManagementService.deleteCourse(courseNo);
+        map.put("msg","删除成功");
+        map.put("url","/exam/admin/courseData");
+        return new ModelAndView("common/success",map);
+    }
+
+    @GetMapping("/deleteStudent")
+    public ModelAndView deleteStudent(Map<String,Object> map,String stuNo){
+
+        dataManagementService.deleteStudent(stuNo);
+        map.put("msg","删除成功");
+        map.put("url","/exam/admin/studentData");
+        return new ModelAndView("common/success",map);
+    }
+
+    @GetMapping("/deleteTeacher")
+    public ModelAndView deleteTeacher(Map<String,Object> map,String tcNo){
+
+        dataManagementService.deleteTeacher(tcNo);
+        map.put("msg","删除成功");
+        map.put("url","/exam/admin/teacherData");
+        return new ModelAndView("common/success",map);
+    }
+
+    @GetMapping("/deleteExamRoom")
+    public ModelAndView deleteExamRoom(Map<String,Object> map,Integer id){
+        dataManagementService.deleteExamRoom(id);
+        map.put("msg","删除成功");
+        map.put("url","/exam/admin/examRoomData");
+        return new ModelAndView("common/success",map);
     }
 
 }

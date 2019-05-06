@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ExamRoomDao  extends JpaRepository<ExamRoom,Integer> {
     List<ExamRoom> findByAvailable(Integer available);
+
+
 }
