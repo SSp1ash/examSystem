@@ -32,7 +32,6 @@
                 <li class="dropdown-header">操作</li>
                 <li><a href="/exam/admin/selectCourse/autoSelectSite">自动选课</a></li>
                 <li><a href="/exam/admin/selectCourse/confirmSelectCourse">生成课号</a></li>
-                <li><a href="/sell/seller/product/index">选课调整</a></li>
                 <li class="dropdown-header"></li>
             </ul>
         </li>
@@ -42,6 +41,7 @@
                 <li class="dropdown-header">操作</li>
                 <li><a href="/exam/admin/examArranged/autoArranged">自动排考</a></li>
                 <li><a href="/sell/seller/category/index">手动调整排考</a></li>
+                <li><a href="/exam/admin/examArranged/detailArrangedExam">查看详细排考情况</a></li>
                 <li class="dropdown-header"></li>
 
             </ul>

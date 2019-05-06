@@ -52,9 +52,12 @@
                 <tr>
                     <td>${stuExamDetail.getCourseNo()}</td>
                     <td>${stuExamDetail.getCourseName()}</td>
-                    <#if stuExamDetail.getScore()??>
-                        <td>${stuExamDetail.getScore()}</td>
-                    <#else><td> </td>
+                    <#if stuExamDetail.getScore()??&&stuExamDetail.getScore() gte 60>
+                        <td><p>${stuExamDetail.getScore()}</p></td>
+                    <#elseif stuExamDetail.getScore()??&&stuExamDetail.getScore() lt 60>
+                        <td><p style="color: red;">${stuExamDetail.getScore()}</p></td>
+                    <#else>
+                        <td></td>
                     </#if>
                     <td>${stuExamDetail.getTimeSemester()}</td>
                 </tr>

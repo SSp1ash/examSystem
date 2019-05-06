@@ -57,9 +57,12 @@
                     <td>${studentScore.getStuName()}</td>
                     <td>${studentScore.getCourseNo()}</td>
                     <td>${studentScore.getCourseName()}</td>
-                    <#if studentScore.getScore()??>
-                        <td>${studentScore.getScore()}</td>
-                    <#else><td></td>
+                    <#if studentScore.getScore()??&&studentScore.getScore() gte 60>
+                        <td><p>${studentScore.getScore()}</p></td>
+                    <#elseif studentScore.getScore()??&&studentScore.getScore() lt 60>
+                        <td><p style="color: red;">${studentScore.getScore()}</p></td>
+                    <#else>
+                        <td></td>
                     </#if>
 
                     <td>${studentScore.getTimeSemester()}</td>
@@ -106,7 +109,7 @@
 <script>
     $(".updateScore").click(function () {
         var id = $(this).parents("tr").find("td").eq(0).html();
-        var score=$(this).parents("tr").find("td").eq(5).html();
+        var score=$(this).parents("tr").find("td").eq(5).find("p").html();
         $("#score").val(score);
         $("#courseSelectId").val(id);
 
