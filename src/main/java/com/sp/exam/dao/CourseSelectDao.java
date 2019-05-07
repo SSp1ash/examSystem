@@ -15,4 +15,6 @@ public interface CourseSelectDao extends JpaRepository<CourseSelect,Integer> {
 
     List<CourseSelect> findByStuNo(String stuNo);
 
+    List<CourseSelect> findByTime(String time);
+
 }

@@ -48,6 +48,10 @@
         </li>
 
         <li>
+            <a href="/exam/admin/viewScoreAnalyse"><i class="fa fa-fw fa-list-alt"></i> 成绩分析统计</a>
+        </li>
+
+        <li>
             <a href="/exam/user/logout"><i class="fa fa-fw fa-list-alt"></i> 登出</a>
         </li>
     </ul>
