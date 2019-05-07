@@ -1,21 +1,26 @@
 package com.sp.exam.service.impl;
 
+import com.sp.exam.VO.ResultVO;
 import com.sp.exam.dao.CourseDao;
 import com.sp.exam.dao.CourseExamDao;
 import com.sp.exam.dao.CourseRemixDao;
 import com.sp.exam.dao.CourseRemixRecordDao;
+import com.sp.exam.dto.CourseRemixRecordDTO;
 import com.sp.exam.enums.CommonEnum;
 import com.sp.exam.pojo.CourseExam;
 import com.sp.exam.pojo.CourseRemix;
 import com.sp.exam.pojo.CourseRemixRecord;
 import com.sp.exam.service.RemixCourseService;
+import com.sp.exam.utils.GetSemester;
 import com.sp.exam.utils.KeyUtil;
 import com.sp.exam.utils.RemixCourseUtil;
+import com.sp.exam.utils.ResultVOUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -140,7 +145,110 @@ public class RemixCourseServiceImpl implements RemixCourseService {
             courseExam.remove(0);
 
         }
+    }
 
+    /**
+         * @Description:此方法是手动排考的前面操作，因为不管怎么公共课都不能参加remix的
+         * @author: SSp1ash
+         * @Date:   2019/5/7
+         */
+    @Override
+    public void manualPreRemix() {
+        List<CourseExam> courseExam = courseExamDao.findAll();
+        //使用迭代器
+        Iterator<CourseExam> itl =courseExam.iterator();
 
+        //1.先把公共课从list里面移除
+        while(itl.hasNext()){
+            //如果是公共课，直接加入remix,然后把它从list里面删除
+
+            //取出迭代器所指向的值
+            CourseExam thisCourseExam = itl.next();
+            //判断是否为公共课，公共课直接加入然后从List里面删掉
+            if(courseDao.findById(thisCourseExam.getCourseNo()).get().getLimit()==0){
+                CourseRemix courseRemix=new CourseRemix();
+                courseRemix.setRemixId(KeyUtil.genUniqueKey());
+                courseRemix.setTime(thisCourseExam.getTime());
+                courseRemix.setBeArranged(String.valueOf(CommonEnum.NOT_BE_ARRANGED.getCode()));
+                courseRemix.setWeight(thisCourseExam.getWeight());
+                courseRemix.setRemixLimit("0");
+                courseRemixDao.save(courseRemix);
+                CourseRemixRecord courseRemixRecord=new CourseRemixRecord();
+                courseRemixRecord.setRemixId(courseRemix.getRemixId());
+                courseRemixRecord.setCourseId(thisCourseExam.getCourseNo());
+                courseRemixRecord.setTime(thisCourseExam.getTime());
+                courseRemixRecord.setBeArranged(String.valueOf(CommonEnum.NOT_BE_ARRANGED.getCode()));
+                courseRemixRecordDao.save(courseRemixRecord);
+                //此时删除该list
+                itl.remove();
+            }
+        }
+    }
+
+    @Override
+    public ResultVO manualRemix(CourseExam courseA, CourseExam courseB) {
+        if(courseA.getCourseNo().equals(courseB.getCourseNo())){
+            CourseRemix courseRemix=new CourseRemix();
+            courseRemix.setRemixId(KeyUtil.genUniqueKey());
+            courseRemix.setTime(courseA.getTime());
+            courseRemix.setBeArranged(String.valueOf(CommonEnum.NOT_BE_ARRANGED.getCode()));
+            courseRemix.setWeight(courseA.getWeight());
+            courseRemix.setRemixLimit("0");
+            courseRemixDao.save(courseRemix);
+            CourseRemixRecord courseRemixRecord=new CourseRemixRecord();
+            courseRemixRecord.setRemixId(courseRemix.getRemixId());
+            courseRemixRecord.setCourseId(courseA.getCourseNo());
+            courseRemixRecord.setTime(courseA.getTime());
+            courseRemixRecord.setBeArranged(String.valueOf(CommonEnum.NOT_BE_ARRANGED.getCode()));
+            courseRemixRecordDao.save(courseRemixRecord);
+            return ResultVOUtil.success();
+        }
+        boolean contrast = RemixCourseUtil.contrast(courseDao.findById(courseA.getCourseNo()).get(),courseDao.findById(courseB.getCourseNo()).get());
+        if (contrast) {
+            CourseRemix courseRemix = new CourseRemix();
+            courseRemix.setRemixId(KeyUtil.genUniqueKey());
+            courseRemix.setWeight(courseA.getWeight() + courseB.getWeight());
+            courseRemix.setBeArranged("0");
+            courseRemix.setTime(courseA.getTime());
+            courseRemix.setRemixLimit(String.valueOf(courseDao.findById(courseA.getCourseNo()).get().getLimit())+"+"
+                    +String.valueOf(courseDao.findById(courseB.getCourseNo()).get().getLimit()));
+
+            courseRemixDao.save(courseRemix);
+
+            CourseRemixRecord courseRemixRecord = new CourseRemixRecord();
+            courseRemixRecord.setRemixId(courseRemix.getRemixId());
+            courseRemixRecord.setCourseId(courseA.getCourseNo());
+            courseRemixRecord.setBeArranged("0");
+            courseRemixRecord.setTime(courseA.getTime());
+            CourseRemixRecord courseRemixRecord1 = new CourseRemixRecord();
+            //两者就一个课程号不一样，所以用拷贝
+            BeanUtils.copyProperties(courseRemixRecord, courseRemixRecord1);
+            courseRemixRecord1.setCourseId(courseB.getCourseNo());
+            //然后写入数据库
+            courseRemixRecordDao.save(courseRemixRecord);
+            courseRemixRecordDao.save(courseRemixRecord1);
+            return ResultVOUtil.success();
+    }else {
+        return ResultVOUtil.error(000,"这两个课remix会有冲突");
+        }
+    }
+
+    @Override
+    public List<CourseRemix> selectAvailable() {
+        List<CourseRemix> courseRemixes = courseRemixDao.findByTimeAndBeArrangedOrderByWeightDesc(GetSemester.get(), "0");
+        return courseRemixes;
+    }
+
+    @Override
+    public List<CourseRemixRecordDTO> getAllCourseRemix() {
+        List<CourseRemixRecord> courseRemixRecords = courseRemixRecordDao.findByTime(GetSemester.get());
+        List<CourseRemixRecordDTO> courseRemixRecordDTOS=new ArrayList<>();
+        for(CourseRemixRecord courseRemixRecord:courseRemixRecords){
+            CourseRemixRecordDTO courseRemixRecordDTO=new CourseRemixRecordDTO();
+            BeanUtils.copyProperties(courseRemixRecord,courseRemixRecordDTO);
+            courseRemixRecordDTO.setCourseName(courseDao.findById(courseRemixRecord.getCourseId()).get().getCourseName());
+            courseRemixRecordDTOS.add(courseRemixRecordDTO);
+        }
+        return courseRemixRecordDTOS;
     }
 }

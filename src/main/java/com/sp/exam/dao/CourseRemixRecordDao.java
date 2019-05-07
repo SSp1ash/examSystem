@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface CourseRemixRecordDao extends JpaRepository<CourseRemixRecord,Integer> {
     List<CourseRemixRecord> findByRemixId(String remixId);
+
+    boolean existsByCourseId(String courseId);
+
+    List<CourseRemixRecord> findByTime(String time);
 }

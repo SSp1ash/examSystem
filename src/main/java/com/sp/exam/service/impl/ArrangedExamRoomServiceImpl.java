@@ -93,4 +93,26 @@ public class ArrangedExamRoomServiceImpl implements ArrangedExamRoomService {
         }
 
     }
+
+    @Override
+    public Integer[] getTeacherNumAndRoomNum(String timeDetail) {
+        TimeTable timeTable = timeTableDao.findByTimeDetailAndTimeSemester(timeDetail, GetSemester.get());
+        List<CourseRemixRecord> remixRecords = courseRemixRecordDao.findByRemixId(timeTable.getRemixId());
+        List<String> CourseNos = remixRecords.stream().map(e -> e.getCourseId()).collect(Collectors.toList());
+        Integer a[]=new Integer[2];
+        a[0]=CourseNos.size()*2;
+        List<CourseSelectResult> courseSelectResultList=new ArrayList<>();
+        for(String courseNo:CourseNos){
+            courseSelectResultList.addAll(courseSelectResultDao.findByCourseNo(courseNo));
+        }
+        a[1]=courseSelectResultList.size();
+        return a;
+    }
+
+
+    @Override
+    public List<TimeTable> getBeArrangedTimeTable() {
+        List<TimeTable> timeTables = timeTableDao.findByBeArrangedAndExamRoomArrangedAndTimeSemester("1", "0", GetSemester.get());
+        return timeTables;
+    }
 }

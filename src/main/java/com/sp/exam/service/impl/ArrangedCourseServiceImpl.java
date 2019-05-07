@@ -1,6 +1,7 @@
 package com.sp.exam.service.impl;
 
 import com.sp.exam.dao.*;
+import com.sp.exam.dto.CourseExamDTO;
 import com.sp.exam.pojo.CourseExam;
 import com.sp.exam.pojo.CourseRemix;
 import com.sp.exam.pojo.CourseRemixRecord;
@@ -8,8 +9,11 @@ import com.sp.exam.pojo.TimeTable;
 import com.sp.exam.service.ArrangedCourseService;
 import com.sp.exam.utils.GetSemester;
 import com.sp.exam.utils.RemixCourseUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -256,6 +260,47 @@ public class ArrangedCourseServiceImpl implements ArrangedCourseService {
     public List<TimeTable> timeTablePoint(String week, String x) {
         List<TimeTable> result = timeTableDao.findByTimeDetailLikeAndTimeSemester(week + "%" + x, GetSemester.get());
         return result;
+    }
+
+    @Override
+    public List<CourseExamDTO> courseExamNotRemix() {
+        List<CourseExam> courseExams = courseExamDao.findByTime(GetSemester.get());
+        List<CourseExamDTO> courseExamNotRemix=new ArrayList<>();
+        for(CourseExam courseExam:courseExams){
+            if(!courseRemixRecordDao.existsByCourseId(courseExam.getCourseNo())){
+                CourseExamDTO courseExamDTO=new CourseExamDTO();
+                BeanUtils.copyProperties(courseExam,courseExamDTO);
+                courseExamDTO.setCourseName(courseDao.findById(courseExam.getCourseNo()).get().getCourseName());
+                courseExamNotRemix.add(courseExamDTO);
+            }
+        }
+
+        return courseExamNotRemix;
+    }
+
+    @Override
+    public void manualArrangedTimeTable(String timeDetail, String remixId) {
+        TimeTable timeTable = timeTableDao.findByTimeDetailAndTimeSemester(timeDetail, GetSemester.get());
+        timeTable.setRemixId(remixId);
+        timeTable.setBeArranged("1");
+        timeTableDao.save(timeTable);
+        CourseRemix courseRemix = courseRemixDao.findById(remixId).get();
+        courseRemix.setBeArranged("1");
+        courseRemixDao.save(courseRemix);
+
+        List<CourseRemixRecord> byRemixId = courseRemixRecordDao.findByRemixId(courseRemix.getRemixId());
+        for(CourseRemixRecord courseRemixRecord:byRemixId){
+            courseRemixRecord.setBeArranged("1");
+            courseRemixRecordDao.save(courseRemixRecord);
+        }
+
+        List<String> courseList = byRemixId.stream().map(e -> e.getCourseId()).collect(Collectors.toList());
+
+        for(String courseNo:courseList){
+            CourseExam courseExam = courseExamDao.findById(courseNo).get();
+            courseExam.setBeArranged("1");
+            courseExamDao.save(courseExam);
+        }
     }
 }
 

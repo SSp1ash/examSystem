@@ -87,6 +87,7 @@ public class SelectCourseController {
     }
 
     @GetMapping("/confirmSelectCourse/confirm")
+    @ResponseBody
     public ResultVO confirmChoose(){
         selectCourseResultService.summary();
         return ResultVOUtil.success();

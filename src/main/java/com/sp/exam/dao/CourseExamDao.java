@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CourseExamDao extends JpaRepository<CourseExam,String> {
     List<CourseExam> findByTime(String time);
+
 }

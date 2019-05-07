@@ -8,9 +8,7 @@
         <li>
             <a href="/exam/user/userInfo"><i class="fa fa-fw fa-list-alt"></i> 我的资料</a>
         </li>
-        <li>
-            <a href="#"><i class="fa fa-fw fa-list-alt"></i> 全局管理</a>
-        </li>
+
 
         <li class="dropdown open">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-fw fa-plus"></i> 数据管理 <span class="caret"></span></a>
@@ -40,7 +38,7 @@
             <ul class="dropdown-menu" role="menu">
                 <li class="dropdown-header">操作</li>
                 <li><a href="/exam/admin/examArranged/autoArranged">自动排考</a></li>
-                <li><a href="/sell/seller/category/index">手动调整排考</a></li>
+                <li><a href="/exam/admin/examArranged/manualArranged">手动调整排考</a></li>
                 <li><a href="/exam/admin/examArranged/detailArrangedExam">查看详细排考情况</a></li>
                 <li class="dropdown-header"></li>
 

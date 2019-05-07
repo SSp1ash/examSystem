@@ -10,7 +10,8 @@ import java.io.Serializable;
 @Data
 public class ResultVO<T> implements Serializable {
 
-    private static final long serialVersionUID = 5480079463038740681L;
+
+    private static final long serialVersionUID = 5787017166520190094L;
 
     private Integer code;
 

@@ -178,8 +178,12 @@
 <script>
     $('#confirm').click(function(){
         $.ajax({url:"/exam/admin/selectCourse/confirmSelectCourse/confirm",
-            dataType:JSON,
-            success:alert("确定成功")
+            type:"get",
+            dataType:"json",
+            success:function () {
+                alert("确定成功");
+                window.location.reload();
+            }
         });
     });
 

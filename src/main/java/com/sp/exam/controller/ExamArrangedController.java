@@ -3,11 +3,13 @@ package com.sp.exam.controller;
 import com.sp.exam.VO.ResultVO;
 import com.sp.exam.constant.CookieConstant;
 import com.sp.exam.constant.RedisConstant;
+import com.sp.exam.dao.CourseExamDao;
+import com.sp.exam.dao.CourseRemixRecordDao;
 import com.sp.exam.dao.UserDao;
+import com.sp.exam.dto.CourseExamDTO;
+import com.sp.exam.dto.CourseRemixRecordDTO;
 import com.sp.exam.dto.ExamRoomArrangedDTO;
-import com.sp.exam.pojo.CourseExam;
-import com.sp.exam.pojo.ExamRoom;
-import com.sp.exam.pojo.TimeTable;
+import com.sp.exam.pojo.*;
 import com.sp.exam.service.*;
 import com.sp.exam.utils.CookieUtil;
 import com.sp.exam.utils.ResultVOUtil;
@@ -19,9 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
@@ -57,11 +57,27 @@ public class ExamArrangedController {
     @Autowired
     private ArrangedDLCService arrangedDLCService;
 
+    @Autowired
+    private CourseExamDao courseExamDao;
+
+
+
+
     @GetMapping("/confirmExamCourse")
+    @ResponseBody
     public ResultVO confirmExamCourse(){
         List<String> exam = courseExamService.getExam();
         remixCourseService.autoRemix();
 
+        return ResultVOUtil.success();
+    }
+
+    //这种方式不会去remix课程，但是还是会吧公共课先去掉
+    @GetMapping("/confirmExamCourse2")
+    @ResponseBody
+    public ResultVO confirmExamCourse2(){
+        List<String> exam = courseExamService.getExam();
+        remixCourseService.manualPreRemix();
         return ResultVOUtil.success();
     }
 
@@ -89,25 +105,64 @@ public class ExamArrangedController {
         return new ModelAndView("examArranged/autoExamArranged",map);
     }
 
+
+    @GetMapping("/manualArranged")
+    public ModelAndView manualArranged(Map<String,Object> map,
+                                     @RequestParam(value = "week",defaultValue = "1")String week,
+                                     HttpServletRequest request){
+        List<TimeTable> timeTables1 = arrangedCourseService.timeTablePoint(week, "1");
+        List<TimeTable> timeTables2 = arrangedCourseService.timeTablePoint(week, "2");
+        List<TimeTable> timeTables3 = arrangedCourseService.timeTablePoint(week, "3");
+        List<TimeTable> timeTables4 = arrangedCourseService.timeTablePoint(week, "4");
+
+        List<TimeTable> timeTables = arrangedExamRoomService.getBeArrangedTimeTable();
+        map.put("timeTables",timeTables);
+
+
+        List<CourseExam> courseExams=arrangedCourseService.courseExamStatus();
+        List<CourseExam> courseExamShows=courseExamService.showCourseExam();
+        List<CourseExamDTO> courseExamNotRemixes=arrangedCourseService.courseExamNotRemix();
+        List<CourseRemix> courseRemixes = remixCourseService.selectAvailable();
+        List<CourseRemixRecordDTO> allCourseRemixRecord = remixCourseService.getAllCourseRemix();
+        map.put("timetables1",timeTables1);
+        map.put("timetables2",timeTables2);
+        map.put("timetables3",timeTables3);
+        map.put("timetables4",timeTables4);
+        map.put("courseExams",courseExams);
+        map.put("courseExamShows",courseExamShows);
+        map.put("courseExamNotRemixes",courseExamNotRemixes);
+        map.put("courseRemixes",courseRemixes);
+        map.put("allCourseRemixRecord",allCourseRemixRecord);
+        Cookie cookie= CookieUtil.get(request, CookieConstant.TOKEN);
+        String userID = redisTemplate.opsForValue().get(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
+        map.put("userName",userDao.findById(userID).get().getNickname());
+        map.put("userType", UserTypeUtil.userType(userDao.findById(userID).get().getUserType()));
+        return new ModelAndView("examArranged/manualExamArranged",map);
+    }
+
     @GetMapping("/auto1")
+    @ResponseBody
     public ResultVO auto1(){
         arrangedCourseService.arrangedTimeTableByDay();
         return ResultVOUtil.success();
     }
 
     @GetMapping("/auto2")
+    @ResponseBody
     public ResultVO auto2(){
         arrangedCourseService.arrangedTimeTableByTimeSlot();
         return ResultVOUtil.success();
     }
 
     @GetMapping("/auto3")
+    @ResponseBody
     public ResultVO auto3(){
         arrangedCourseService.arrangedTimeTableByNoting();
         return ResultVOUtil.success();
     }
 
     @GetMapping("/last")
+    @ResponseBody
     public ResultVO last(){
         arrangedExamRoomService.arrangedExamRoom();
         arrangedStuSitService.arrangedStuSit();
@@ -132,5 +187,34 @@ public class ExamArrangedController {
 
     }
 
+    @PostMapping("/remixCourse")
+    @ResponseBody
+    public ResultVO remixCourse(String courseA,String courseB){
+        CourseExam courseExamA = courseExamDao.findById(courseA).get();
+        CourseExam courseExamB = courseExamDao.findById(courseB).get();
+        ResultVO resultVO = remixCourseService.manualRemix(courseExamA, courseExamB);
+        System.out.println(resultVO);
+        return resultVO;
+    }
+
+    @PostMapping("/arrangedRemixCourse")
+    @ResponseBody
+    public ResultVO arrangedRemixCourse(String timeDetail, String remixCourseId){
+        arrangedCourseService.manualArrangedTimeTable(timeDetail,remixCourseId);
+        return ResultVOUtil.success();
+    }
+
+    @GetMapping("/getTeacherNumExamRoomNum")
+    public ModelAndView getTeacherNumExamRoomNum(Map<String,Object> map, HttpServletRequest request,String timeDetail){
+        Cookie cookie= CookieUtil.get(request, CookieConstant.TOKEN);
+        String userID = redisTemplate.opsForValue().get(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
+        map.put("userName",userDao.findById(userID).get().getNickname());
+        map.put("userType", UserTypeUtil.userType(userDao.findById(userID).get().getUserType()));
+        Integer[] num = arrangedExamRoomService.getTeacherNumAndRoomNum(timeDetail);
+        map.put("teacherNum",num[0]);
+        map.put("roomNum",num[1]);
+        return new ModelAndView("examArranged/manualTeacherAndRoom",map);
+
+    }
 
 }

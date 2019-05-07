@@ -21,11 +21,11 @@
     <div class="row clearfix">
         <div class="col-md-12 column">
             <ul class="nav nav-tabs">
-                <li class="active">
-                    <a href="#">考试周第一周</a>
+                <li>
+                    <a href="/exam/admin/examArranged/autoArranged?week=1">考试周第一周</a>
                 </li>
                 <li>
-                    <a href="#">考试周第二周</a>
+                    <a href="/exam/admin/examArranged/autoArranged?week=2">考试周第二周</a>
                 </li>
             </ul>
         </div>
@@ -257,7 +257,7 @@
 
 <#if !(courseExams?has_content)>
 <script>
-    alert("系统检测到还没进行确认考试，将进行考试科目确认");
+    alert("系统检测到还没进行确认考试，将进行考试科目确认，考试科目确认后同时会生成remix的考试");
     function remind(){
     $("#modal-757680").trigger("click");
     }
@@ -279,26 +279,34 @@
 <script>
     $('#auto1').click(function(){
         $.ajax({url:"/exam/admin/examArranged/auto1",
-            dataType:JSON,
-            success:alert("选课方式1完成")
+            dataType:"json",
+            success: function (data) {
+                alert(data.msg);
+            }
         });
     });
     $('#auto2').click(function(){
         $.ajax({url:"/exam/admin/examArranged/auto2",
-            dataType:JSON,
-            success:alert("选课方式2完成")
+            dataType:"json",
+            success: function (data) {
+                alert(data.msg);
+            }
         });
     });
     $('#auto3').click(function(){
         $.ajax({url:"/exam/admin/examArranged/auto3",
-            dataType:JSON,
-            success:alert("选课方式3完成")
+            dataType:"json",
+            success: function (data) {
+                alert(data.msg);
+            }
         });
     });
     $('#last').click(function(){
         $.ajax({url:"/exam/admin/examArranged/last",
-            dataType:JSON,
-            success:alert("自动排考已全部完成")
+            dataType:"json",
+            success: function (data) {
+                alert(data.msg);
+            }
         });
     });
 
