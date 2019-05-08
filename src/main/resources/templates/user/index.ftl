@@ -61,7 +61,7 @@
 
                 <div class="am-cf">
                     <input type="submit" name="" value="登 录" class="am-btn am-btn-primary am-btn-sm am-fl">
-                    <button class="am-btn am-btn-default am-btn-sm am-fr" type="button"  data-toggle="modal" data-target="#myModal">忘记密码QAQ</button>
+
 
 
 

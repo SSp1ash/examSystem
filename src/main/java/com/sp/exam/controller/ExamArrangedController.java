@@ -3,9 +3,8 @@ package com.sp.exam.controller;
 import com.sp.exam.VO.ResultVO;
 import com.sp.exam.constant.CookieConstant;
 import com.sp.exam.constant.RedisConstant;
-import com.sp.exam.dao.CourseExamDao;
-import com.sp.exam.dao.CourseRemixRecordDao;
-import com.sp.exam.dao.UserDao;
+import com.sp.exam.dao.*;
+import com.sp.exam.dto.CourseDemandDTO;
 import com.sp.exam.dto.CourseExamDTO;
 import com.sp.exam.dto.CourseRemixRecordDTO;
 import com.sp.exam.dto.ExamRoomArrangedDTO;
@@ -26,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +60,11 @@ public class ExamArrangedController {
     @Autowired
     private CourseExamDao courseExamDao;
 
+    @Autowired
+    private TeacherDao teacherDao;
+
+    @Autowired
+    private ExamRoomDao examRoomDao;
 
 
 
@@ -118,6 +123,10 @@ public class ExamArrangedController {
         List<TimeTable> timeTables = arrangedExamRoomService.getBeArrangedTimeTable();
         map.put("timeTables",timeTables);
 
+        List<Teacher> teacherList = teacherDao.findAll();
+        List<ExamRoom> examRoomList = examRoomDao.findAll();
+        map.put("teacherList",teacherList);
+        map.put("examRoomList",examRoomList);
 
         List<CourseExam> courseExams=arrangedCourseService.courseExamStatus();
         List<CourseExam> courseExamShows=courseExamService.showCourseExam();
@@ -205,16 +214,30 @@ public class ExamArrangedController {
     }
 
     @GetMapping("/getTeacherNumExamRoomNum")
-    public ModelAndView getTeacherNumExamRoomNum(Map<String,Object> map, HttpServletRequest request,String timeDetail){
-        Cookie cookie= CookieUtil.get(request, CookieConstant.TOKEN);
-        String userID = redisTemplate.opsForValue().get(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
-        map.put("userName",userDao.findById(userID).get().getNickname());
-        map.put("userType", UserTypeUtil.userType(userDao.findById(userID).get().getUserType()));
-        Integer[] num = arrangedExamRoomService.getTeacherNumAndRoomNum(timeDetail);
-        map.put("teacherNum",num[0]);
-        map.put("roomNum",num[1]);
-        return new ModelAndView("examArranged/manualTeacherAndRoom",map);
+    @ResponseBody
+    public ResultVO getTeacherNumExamRoomNum(String timeDetail){
+
+        List<CourseDemandDTO> teacherNumAndRoomNum = arrangedExamRoomService.getTeacherNumAndRoomNum(timeDetail);
+        return  ResultVOUtil.success(teacherNumAndRoomNum);
+
 
     }
 
+    @PostMapping("/arrangedTeacherAndRoom")
+    @ResponseBody
+    public ResultVO arrangedTeacherAndRoom(String selectTimeDetail,String teacherA,String roomA,String teacherB,String roomB){
+        if(teacherA.equals(null)||roomA.equals("")){
+            return ResultVOUtil.error(001,"你没有传值进来");
+        }
+        ResultVO resultVO = arrangedExamRoomService.manualArrangedTeacherAndExamRoom(selectTimeDetail, teacherA, roomA, teacherB, roomB);
+
+        return resultVO;
+    }
+
+    @GetMapping("/stuSit")
+    @ResponseBody
+    public ResultVO stuSit(){
+        arrangedStuSitService.arrangedStuSit();
+        return ResultVOUtil.success();
+    }
 }

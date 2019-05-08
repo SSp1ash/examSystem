@@ -403,11 +403,14 @@
                             </h4>
                         </div>
                         <div class="modal-body">
+                            <form class="selectTeacherAndRoom" id="selectTeacherAndRoom">
                             <select class="form-control" style="width: 200px;" name="selectTimeDetail" id="selectTimeDetail">
+                                <option value=""></option>
                                 <#list timeTables as timeTable>
                                     <option value="${timeTable.getTimeDetail()}">${timeTable.getTimeDetail()}</option>
                                 </#list>
                             </select>
+                            </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -421,7 +424,13 @@
         </div>
     </div>
 </div>
-
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <button type="button" class="btn btn-lg btn-success" id="stuSit">学生座位生成</button>
+        </div>
+    </div>
+</div>
 
 
 <#if !(courseExams?has_content)>
@@ -449,20 +458,87 @@
 </#if>
 
 <script>
+    $('#stuSit').click(function(event){
+        event.preventDefault();
+
+        $.ajax({
+            type:"get",
+            url:"/exam/admin/examArranged/stuSit",
+            dataType:"json",
+            success: function (data) {
+                alert(data.msg);
+                window.location.reload();
+            }
+        });
+    });
+
     $("select#selectTimeDetail").change(function(){
         var timeDetail=$(this).val();
-            alert($(this).val());
-
         $.ajax({
             type:"get",
             url:"/exam/admin/examArranged/getTeacherNumExamRoomNum?timeDetail="+timeDetail,
             contentType: false,
             processData: false,
             dataType:"json",
+            success: function (data) {
+                var teacherNum1=data.data[0].teacherNum;
+                var roomNum1=data.data[0].roomNum;
+                var courseName1=data.data[0].courseName;
+                if(data.data[1]!=null){
+                    var teacherNum2=data.data[1].teacherNum;
+                    var roomNum2=data.data[1].roomNum;
+                    var courseName2=data.data[1].courseName;
+                }
+                $(".selectTeacherAndRoom").append("<label for=\"course\" class=\"col-sm-2 control-label\">"+courseName1+"需要监考教师数量"+teacherNum1+"需要考室数量"+roomNum1+"</label>" );
+
+
+                    $(".selectTeacherAndRoom").append("" +
+                            "<select multiple name='teacherA'><#list teacherList as teacher><option value='${teacher.getTcNo()}'>${teacher.getTcName()}${teacher.getTcNo()}</option></#list></select>"
+                    );
+
+
+
+                    $(".selectTeacherAndRoom").append("" +
+                            "<select multiple name='roomA'><#list examRoomList as examRoom> <option value='${examRoom.getRoomNo()}'>${examRoom.getRoomNo()}${examRoom.getRoomPlace()}</option></#list></select>"
+                    );
+
+                if(data.data[1]!=null){
+                    $(".selectTeacherAndRoom").append("<label for=\"course\" class=\"col-sm-2 control-label\">"+courseName2+"需要监考教师数量"+teacherNum2+"需要考室数量"+roomNum2+"</label>" );
+
+                        $(".selectTeacherAndRoom").append("" +
+                                "<select multiple name='teacherB'><#list teacherList as teacher> <option value='${teacher.getTcNo()}'>${teacher.getTcName()}${teacher.getTcNo()}</option></#list></select>"
+                        );
+
+
+                        $(".selectTeacherAndRoom").append("" +
+                                "<select multiple name='roomB'><#list examRoomList as examRoom> <option value='${examRoom.getRoomNo()}'>${examRoom.getRoomNo()}${examRoom.getRoomPlace()}</option></#list></select>"
+                        );
+
+                }
+                $(".selectTeacherAndRoom").append("<button type='button' class='btn btn-primary' id='arrangedTeacherAndRoom'>安排</button>");
+            }
         });
         });
 
 
+    $('body').on('click','#arrangedTeacherAndRoom',(function(event){
+        alert("12");
+        event.preventDefault();
+        var formData= new FormData(document.getElementById("selectTeacherAndRoom"));
+
+        $.ajax({
+            type:"post",
+            url:"/exam/admin/examArranged/arrangedTeacherAndRoom",
+            data:formData,
+            contentType: false,
+            processData: false,
+            dataType:"json",
+            success: function (data) {
+                alert(data.msg);
+                window.location.reload();
+            }
+        });
+    }));
 
     $('#remixCourse').click(function(event){
         event.preventDefault();
