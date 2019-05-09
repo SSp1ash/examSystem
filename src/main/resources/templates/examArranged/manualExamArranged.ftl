@@ -522,7 +522,6 @@
 
 
     $('body').on('click','#arrangedTeacherAndRoom',(function(event){
-        alert("12");
         event.preventDefault();
         var formData= new FormData(document.getElementById("selectTeacherAndRoom"));
 

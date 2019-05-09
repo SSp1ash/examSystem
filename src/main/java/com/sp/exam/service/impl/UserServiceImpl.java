@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
         if(userDao.existsByUserIdAndPassword(modifyUserForm.getId(),modifyUserForm.getOldPassword())){
             if(modifyUserForm.getNewPassword().equals(modifyUserForm.getRenewPassword())){
                 User user = userDao.findById(modifyUserForm.getId()).get();
+                user.setNickname(modifyUserForm.getNickName());
                 user.setPassword(modifyUserForm.getNewPassword());
                 userDao.save(user);
                 return ResultVOUtil.success();
